@@ -1,18 +1,18 @@
 <?php
 // Database
-$cfg_database["hostname"] = "";
-$cfg_database["username"] = "";
+$cfg_database["hostname"] = "localhost";
+$cfg_database["username"] = "root";
 $cfg_database["password"] = "";
-$cfg_database["database"] = "";
+$cfg_database["database"] = "lspd_web";
 
 // Session
-$cfg_session["timeout"] = 3600;
+$cfg_session["timeout"] = 3600; // 1 hour
 
 // Discord OAuth2
 $cfg_oauth["token_url"] = "https://discord.com/api/v10/oauth2/token";
-$cfg_oauth["init_url"] = "";
-$cfg_oauth["client_id"] = "";
-$cfg_oauth["client_secret"] = "";
+$cfg_oauth["init_url"] = "https://discord.com/oauth2/authorize?client_id=1327784815906525274&response_type=code&redirect_uri=https%3A%2F%2Flocalhost%2Flspdwaitrp%2Fprocess-oauth.php&scope=identify+guilds+email";
+$cfg_oauth["client_id"] = "1327784815906525274";
+$cfg_oauth["client_secret"] = "3U_Jwhezh37JbtMPnjG9RdsKa4JmCqTn";
 $cfg_oauth["redirect_uri"] = "https://localhost/lspdwaitrp/process-oauth.php";
 $cfg_oauth["scope"] = "identify email guilds";
 
@@ -33,7 +33,7 @@ $cfg_discord["service_discord"] = "https://discord.gg/ZfaDufhDj9";
 
 // Discord Guilds
 // ["guild_id" => "server_invite, "guild_id" => "server_invite"...]
-$cfg_discord["required_guilds"] = ["0" => "https://discord.gg/invite"];
+$cfg_discord["required_guilds"] = ["1214284457385791488" => "https://discord.gg/waitrp"];
 
 // Curl
 $cfg_curl["timeout"] = 10;
