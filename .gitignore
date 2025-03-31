@@ -1,5 +1,6 @@
 # Configuration files with sensitive information
 /php/config.php
+.env
 
 # System and IDE files
 .DS_Store
@@ -7,21 +8,3 @@
 .vscode/
 *.swp
 *~
-
-# Logs and databases
-/logs/
-*.log
-*.sql
-*.sqlite
-
-
-# Environment files
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# Backup files
-*.bak
-*.backup

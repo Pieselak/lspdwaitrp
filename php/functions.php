@@ -181,7 +181,7 @@ function setAnnouncement($content) {
 // Discord API functions
 
 function getDiscordAuthToken($code) {
-    global $cfg_oauth, $cfg_curl;
+    global $cfg_discord, $cfg_oauth, $cfg_curl;
 
     if (empty($code)) {
         return ["success" => false, "message" => "Brak kodu autoryzacyjnego", "token" => null];
@@ -198,7 +198,7 @@ function getDiscordAuthToken($code) {
 
     $curl = curl_init();
     curl_setopt_array($curl, [
-        CURLOPT_URL => $cfg_oauth["token_url"],
+        CURLOPT_URL => $cfg_discord["api_url"] . $cfg_discord["token"],
         CURLOPT_POST => true,
         CURLOPT_POSTFIELDS => http_build_query($payload),
         CURLOPT_RETURNTRANSFER => true,
