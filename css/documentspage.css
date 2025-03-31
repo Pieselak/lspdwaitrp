@@ -1,0 +1,125 @@
+.page .document {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  width: 100%;
+}
+
+.page .document .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0 1rem;
+
+  width: 100%;
+  background-color: var(--color-background2);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}
+
+.page .document .header .nav {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+
+  width: 100%;
+  margin-top: 0.25rem;
+}
+
+.page .document section {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  background-color: var(--color-background2);
+  border-radius: 0.5rem;
+}
+
+.page .document section .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0 1rem;
+
+  width: 100%;
+  padding: 0.5rem;
+  background-color: var(--color-primary);
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.page .document section .content {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  padding: 0.5rem;
+}
+
+.page .document section .content.row {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* OFFICERS */
+
+.page .document section .content .officer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  flex-grow: 1;
+
+  max-width: 250px;
+  background-color: var(--color-background3);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}
+
+.page .document section .content .officer h3,
+.page .document section .content .officer p {
+  width: 100%;
+}
+
+.page .document section .content .officer img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  object-position: top;
+
+  margin-bottom: 0.5rem;
+  border-radius: 0.25rem;
+}
+
+/* DISCORD */
+
+.page .document section .content .discord {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 0.5rem;
+
+  background-color: var(--color-background3);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}
+
+.page .document section .content .discord img {
+  height: 100px;
+  object-fit: cover;
+  object-position: center;
+
+  border-radius: 0.25rem;
+}
+
+.page .document section .content .discord div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* DOCUMENTS */

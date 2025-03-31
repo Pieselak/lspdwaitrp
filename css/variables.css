@@ -1,0 +1,51 @@
+:root {
+  --color-announcement: #8e1619;
+  --color-background: #2b2c30;
+  --color-background2: #1e1e20;
+  --color-background3: #131314;
+
+  --color-text: #e3e3e3;
+  --color-text2: #b3b3b3;
+  --color-text3: #7f7f7f;
+
+  --color-green: #16e64e;
+  --color-green-background: #103f1d;
+  --color-green-hover: #053a15;
+
+  --color-yellow: #e0dd1d;
+  --color-yellow-background: #3f3e10;
+  --color-yellow-hover: #693e00;
+
+  --color-orange: #eb8e14;
+  --color-orange-background: #3f2b10;
+  --color-orange-hover: #5a1e02;
+
+  --color-red: #f30e0e;
+  --color-red-background: #3f1010;
+  --color-red-hover: #67090d;
+
+  --color-primary: #494d61;
+  --color-primary-hover: #7885c4;
+}
+
+:root[data-theme="light"] {
+  --color-background: #f5f5f5;
+  --color-background2: #e0e0e0;
+  --color-background3: #f0f0f0;
+
+  --color-text: #333;
+  --color-text2: #666;
+  --color-text3: #999;
+
+  --color-green: #186c2e;
+  --color-green-hover: #053a15;
+  --color-yellow: #9e6a03;
+  --color-yellow-hover: #693e00;
+  --color-orange: #9b4216;
+  --color-orange-hover: #5a1e02;
+  --color-red: #8e1619;
+  --color-red-hover: #67090d;
+
+  --color-primary: #494d61;
+  --color-primary-hover: #273b94;
+}

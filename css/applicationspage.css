@@ -1,0 +1,72 @@
+.page .apply {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  width: 100%;
+}
+
+.page .apply .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0 1rem;
+
+  width: 100%;
+  background-color: var(--color-background2);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}
+
+.page .apply .header .buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.page .apply section {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  background-color: var(--color-background2);
+  border-radius: 0.5rem;
+}
+
+.page .apply section .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0 1rem;
+
+  width: 100%;
+  padding: 0.5rem;
+  background-color: var(--color-primary);
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.page .apply section .content {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  padding: 0.5rem;
+}
+
+.page .apply section .content.row {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.page .apply section .content .item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex-grow: 1;
+
+  width: auto;
+  background-color: var(--color-background3);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}

@@ -1,0 +1,18 @@
+.announcement {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  z-index: 10;
+
+  width: 100%;
+  padding: 0.5rem;
+  background-color: var(--color-announcement);
+
+  transition: all 0.25s ease;
+}
+
+.announcement a:hover {
+  color: var(--color-text2);
+}

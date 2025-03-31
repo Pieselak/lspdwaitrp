@@ -1,0 +1,265 @@
+/* Import Font */
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Ubuntu+Sans:ital,wght@0,100..800;1,100..800&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap");
+
+/* Import Boxicons */
+@import url("https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css");
+
+/* Import CSS Variables */
+@import url("variables.css");
+
+/* Import CSS Elements */
+@import url("announcement.css");
+@import url("applicationspage.css");
+@import url("documentspage.css");
+@import url("dropdown.css");
+@import url("footer.css");
+@import url("header.css");
+@import url("input.css");
+@import url("loginpage.css");
+@import url("servicepage.css");
+
+/* Style */
+
+html,
+body {
+  margin: 0;
+  font-family: "Ubuntu Sans", sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+
+  min-height: 100vh;
+  color: var(--color-text);
+
+  background-color: var(--color-background);
+  background-image: none;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  z-index: 1;
+}
+
+a {
+  color: var(--color-text);
+  text-decoration: underline;
+
+  transition: all 0.25s ease;
+}
+
+a:hover {
+  color: var(--color-primary-hover);
+}
+
+p {
+  margin: 0;
+}
+
+p.small {
+  font-size: 0.875rem;
+}
+
+p.text2 {
+  color: var(--color-text2);
+}
+
+p.text3 {
+  color: var(--color-text3);
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0;
+}
+
+h1.normal {
+  font-weight: 400;
+}
+
+h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0;
+}
+
+h2.normal {
+  font-weight: 400;
+}
+
+h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0;
+}
+
+h3.normal {
+  font-weight: 400;
+}
+
+h3.text2 {
+  color: var(--color-text2);
+}
+
+h3.text3 {
+  color: var(--color-text3);
+}
+
+h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0;
+}
+
+h4.normal {
+  font-weight: 400;
+}
+
+h4.text2 {
+  color: var(--color-text2);
+}
+
+h4.text3 {
+  color: var(--color-text3);
+}
+
+h5 {
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0;
+}
+
+h5.normal {
+  font-weight: 400;
+}
+
+h5.text2 {
+  color: var(--color-text2);
+}
+
+h5.text3 {
+  color: var(--color-text3);
+}
+
+.status {
+  display: inline-block;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  font-weight: 700;
+
+  color: var(--color-text);
+  background-color: var(--color-background2);
+}
+
+.status.red {
+  color: var(--color-red);
+  background-color: var(--color-red-background);
+}
+
+.status.orange {
+  color: var(--color-orange);
+  background-color: var(--color-orange-background);
+}
+
+.status.yellow {
+  color: var(--color-yellow);
+  background-color: var(--color-yellow-background);
+}
+
+.status.green {
+  color: var(--color-green);
+  background-color: var(--color-green-background);
+}
+
+.status.primary {
+  color: var(--color-primary-hover);
+  background-color: var(--color-primary);
+}
+
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  padding: 1rem 1rem 4.5rem 1rem;
+}
+
+main .background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  opacity: 0;
+
+  width: 100%;
+  height: 100%;
+
+  background-color: none;
+  background-image: none;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+main .background.fade-in {
+  animation: fadeIn 1s ease-in forwards;
+}
+
+main .background.fade-out {
+  animation: fadeOut 1s ease-out forwards;
+}
+
+main .page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  z-index: 1;
+
+  width: 100%;
+  max-width: 1500px;
+
+  animation: pageIn 0.25s ease-out forwards;
+}
+
+@keyframes pageIn {
+  0% {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}

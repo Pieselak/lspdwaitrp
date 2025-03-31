@@ -1,0 +1,77 @@
+.page .login {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  background-color: var(--color-background2);
+  border-radius: 0.5rem;
+}
+
+.page .login .header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  padding: 0.5rem 1rem;
+  background-color: var(--color-primary);
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.page .login .content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  width: 100%;
+  padding: 1rem;
+}
+
+.page .login .content .button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+
+  width: 100%;
+  font-weight: 700;
+  text-decoration: none;
+  padding: 0.5rem 0.5rem;
+  border-radius: 0.5rem;
+  background-color: var(--color-primary);
+  color: var(--color-text);
+
+  transition: background-color 0.2s;
+}
+
+.page .login .content .button:hover {
+  background-color: var(--color-primary-hover);
+}
+
+.page .login .notes {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  padding: 0 1rem 1rem 1rem;
+}
+
+.page .login .notes a {
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.page .login .notes a:hover {
+  color: var(--color-primary-hover);
+}
+
+.page .login .notes p {
+  text-align: center;
+  font-size: 0.875rem;
+}

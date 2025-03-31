@@ -1,0 +1,85 @@
+# Enable URL rewriting
+RewriteEngine On
+
+# Set the base directory for rewrites
+RewriteBase /lspdwaitrp/
+
+# Handle maintenance mode redirect externally
+# This allows direct access to the maintenance page itself
+RewriteCond %{REQUEST_URI} !^/lspdwaitrp/maintenance\.php$
+RewriteCond %{REQUEST_URI} !^/lspdwaitrp/assets/
+RewriteCond %{REQUEST_URI} !^/lspdwaitrp/css/
+RewriteCond %{REQUEST_URI} !^/lspdwaitrp/js/
+RewriteCond %{REMOTE_ADDR} !^127\.0\.0\.1$
+# You can add your IP here to bypass maintenance: RewriteCond %{REMOTE_ADDR} !^your\.ip\.goes\.here$
+
+# Don't serve hidden files
+RewriteCond %{REQUEST_URI} /\.|^\. 
+RewriteRule .* - [F]
+
+# Prevent direct access to sensitive files and directories
+RewriteRule ^php/.*$ - [F,L]
+RewriteRule ^components/.*$ - [F,L]
+RewriteRule ^\.git/.*$ - [F,L]
+
+# Custom error pages
+ErrorDocument 404 /lspdwaitrp/notfound.php
+ErrorDocument 403 /lspdwaitrp/noaccess.php
+ErrorDocument 500 "Internal Server Error - Please try again later."
+
+# Security headers
+<IfModule mod_headers.c>
+    # Protect against XSS attacks
+    Header set X-XSS-Protection "1; mode=block"
+    # Prevent MIME-type sniffing
+    Header set X-Content-Type-Options "nosniff"
+    # Referrer policy
+    Header set Referrer-Policy "same-origin"
+    # Allow embedding only on same origin
+    Header set X-Frame-Options "SAMEORIGIN"
+</IfModule>
+
+# Disable directory indexing
+Options -Indexes
+
+# Set default character set
+AddDefaultCharset UTF-8
+
+# Enable compression
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/x-javascript application/json
+</IfModule>
+
+# Set caching for static assets
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpg "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/gif "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType text/css "access plus 1 week"
+    ExpiresByType text/javascript "access plus 1 week"
+    ExpiresByType application/javascript "access plus 1 week"
+    ExpiresByType application/x-javascript "access plus 1 week"
+    ExpiresByType image/x-icon "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 month"
+    ExpiresByType image/webp "access plus 1 month"
+    ExpiresByType application/font-woff "access plus 1 month"
+    ExpiresByType application/font-woff2 "access plus 1 month"
+    ExpiresByType font/woff "access plus 1 month"
+    ExpiresByType font/woff2 "access plus 1 month"
+</IfModule>
+
+# PHP settings
+php_value session.cookie_httponly 1
+php_value session.use_only_cookies 1
+
+# Handle trailing slashes
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)/$ $1 [L,R=301]
+
+# Simple URL rewrites for cleaner URLs (optional)
+# Example: /profile/username instead of profile.php?user=username
+# RewriteCond %{REQUEST_FILENAME} !-f
+# RewriteCond %{REQUEST_FILENAME} !-d
+# RewriteRule ^profile/([^/]+)/?$ profile.php?user=$1 [L,QSA]

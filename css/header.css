@@ -1,0 +1,193 @@
+header {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+
+  top: 0;
+  z-index: 100;
+  color: var(--color-text);
+  background-color: var(--color-background3);
+  border-bottom: 1px solid var(--color-background2);
+
+  transition: all 0.25s ease;
+}
+
+header .logo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-right: 2rem;
+}
+
+header .logo img {
+  width: 2.25rem;
+}
+
+header .logo .logo-text {
+  display: flex;
+  flex-direction: column;
+  text-wrap: nowrap;
+}
+
+header .menu-button {
+  display: none;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 2.5rem;
+  color: var(--color-text);
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+header .navbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+
+  width: 100%;
+}
+
+header .navbar nav {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1rem;
+}
+
+header a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+
+  color: var(--color-text);
+  text-decoration: none;
+
+  transition: color 0.25s ease;
+}
+
+header a:hover {
+  color: var(--color-primary-hover);
+}
+
+header .navbar .profile {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+header .navbar .profile .profile-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1rem;
+
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  background-color: var(--color-background2);
+
+  transition: all 0.25s ease;
+}
+
+header .navbar .profile .profile-wrapper:hover {
+  background-color: var(--color-primary);
+}
+
+header .navbar .profile .profile-wrapper img {
+  width: 2.5rem;
+  border-radius: 50%;
+}
+
+header .navbar .profile .profile-wrapper .profile-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 0.25rem;
+}
+
+header .navbar .profile .profile-wrapper h5 {
+  color: var(--color-text2);
+}
+
+@media screen and (max-width: 1300px) {
+  header {
+    padding: 1rem 4rem;
+  }
+
+  header .menu-button {
+    display: flex;
+  }
+
+  header .navbar {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    margin-bottom: 1rem;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    padding: 1rem 4rem;
+    border-top: 1px solid var(--color-background2);
+    background-color: var(--color-background3);
+  }
+
+  header .navbar nav {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  header .navbar nav a {
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  header .dropdown,
+  header .dropdown .dropdown-button,
+  header .dropdown .dropdown-content,
+  header .navbar .profile,
+  header .profile .profile-wrapper {
+    width: 100%;
+  }
+
+  header .dropdown .dropdown-button {
+    justify-content: flex-start;
+  }
+
+  header .dropdown .dropdown-button a {
+    width: auto;
+  }
+
+  header .dropdown .dropdown-content {
+    position: inherit;
+    min-width: 100%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  header {
+    padding: 1rem 2rem;
+  }
+
+  header .navbar {
+    padding: 1rem 2rem;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  header {
+    padding: 1rem 1rem;
+  }
+
+  header .navbar {
+    padding: 1rem 1rem;
+  }
+}

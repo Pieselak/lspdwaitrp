@@ -1,0 +1,75 @@
+.page .service {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  background-color: var(--color-background2);
+  border-radius: 0.5rem;
+}
+
+.page .service .header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  padding: 0.5rem 1rem;
+  background-color: var(--color-primary);
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.page .service .content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  width: 100%;
+  padding: 1rem;
+}
+
+.page .service .content .info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  width: 100%;
+  padding: 0.5rem;
+  background-color: var(--color-background3);
+  border-radius: 0.5rem;
+}
+
+.page .service .content .info div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  width: 100%;
+}
+
+.page .service .content .info div .small {
+  color: var(--color-text2);
+}
+
+.page .service .buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+
+  width: 100%;
+  padding: 0 1rem 1rem 1rem;
+}
+
+.page .service .buttons form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}

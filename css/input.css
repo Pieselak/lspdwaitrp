@@ -1,0 +1,124 @@
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+input[type="date"],
+input[type="time"],
+input[type="search"],
+textarea,
+select {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+
+  font: inherit;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--color-primary);
+  outline: none;
+  border-radius: 0.5rem;
+  background-color: var(--color-background3);
+  color: var(--color-text);
+
+  transition: all 0.25s;
+}
+
+select option {
+  background-color: var(--color-background3);
+  color: var(--color-text);
+}
+
+select option:disabled {
+  color: var(--color-text2);
+}
+
+input[type="text"]:disabled,
+input[type="password"]:disabled,
+input[type="email"]:disabled,
+input[type="number"]:disabled,
+input[type="date"]:disabled,
+input[type="time"]:disabled,
+input[type="search"]:disabled,
+textarea:disabled,
+select:disabled {
+  background-color: var(--color-background3);
+  border: 1px solid var(--color-background);
+  cursor: not-allowed;
+}
+
+input[type="text"]:not(:disabled):hover,
+input[type="password"]:not(:disabled):hover,
+input[type="email"]:not(:disabled):hover,
+input[type="number"]:not(:disabled):hover,
+input[type="date"]:not(:disabled):hover,
+input[type="time"]:not(:disabled):hover,
+input[type="search"]:not(:disabled):hover,
+textarea:not(:disabled):hover,
+select:not(:disabled):hover {
+  background-color: var(--color-background2);
+  border: 1px solid var(--color-primary-hover);
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+input[type="time"]:focus,
+input[type="search"]:focus,
+textarea:focus,
+select:focus {
+  background-color: var(--color-background2);
+  border: 1px solid var(--color-primary-hover);
+}
+
+button,
+.button,
+input[type="submit"],
+input[type="reset"],
+input[type="button"] {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+
+  text-decoration: none;
+  font: inherit;
+  padding: 0.5rem 1rem;
+  border: none;
+  outline: none;
+  border-radius: 0.5rem;
+  background-color: var(--color-primary);
+  color: var(--color-text);
+  cursor: pointer;
+
+  transition: all 0.25s;
+}
+
+button.small,
+.button.small,
+input[type="submit"].small,
+input[type="reset"].small,
+input[type="button"].small {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+}
+
+button:disabled,
+.button.disabled,
+input[type="submit"]:disabled,
+input[type="reset"]:disabled,
+input[type="button"]:disabled {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  cursor: not-allowed;
+}
+
+button:not(:disabled):hover,
+.button:not(.disabled):hover,
+input[type="submit"]:not(:disabled):hover,
+input[type="reset"]:not(:disabled):hover,
+input[type="button"]:not(:disabled):hover {
+  color: var(--color-text);
+  background-color: var(--color-primary-hover);
+}
