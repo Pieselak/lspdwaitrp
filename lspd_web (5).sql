@@ -1,0 +1,835 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Apr 03, 2025 at 07:48 PM
+-- Wersja serwera: 10.4.32-MariaDB
+-- Wersja PHP: 8.2.12
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `lspd_web`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `academies`
+--
+
+CREATE TABLE `academies` (
+  `academy_id` int(11) NOT NULL,
+  `status_id` int(11) DEFAULT NULL,
+  `academy_date` datetime DEFAULT NULL,
+  `academy_closes` datetime DEFAULT NULL,
+  `academy_slots` int(11) DEFAULT NULL,
+  `creator_id` varchar(25) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `academies_status`
+--
+
+CREATE TABLE `academies_status` (
+  `status_id` int(11) NOT NULL,
+  `status` varchar(25) DEFAULT NULL,
+  `color` varchar(10) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `applications`
+--
+
+CREATE TABLE `applications` (
+  `application_id` int(11) NOT NULL,
+  `status_id` int(11) DEFAULT NULL,
+  `academy_id` int(11) DEFAULT NULL,
+  `user_id` varchar(25) DEFAULT NULL,
+  `reviewer_id` varchar(25) DEFAULT NULL,
+  `age` int(11) DEFAULT NULL,
+  `ssn` int(11) DEFAULT NULL,
+  `firstname` varchar(100) DEFAULT NULL,
+  `lastname` varchar(100) DEFAULT NULL,
+  `dateofbirth` date DEFAULT NULL,
+  `submitted_at` datetime DEFAULT NULL,
+  `reviewed_at` datetime DEFAULT NULL,
+  `review_comment` varchar(300) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `applications_status`
+--
+
+CREATE TABLE `applications_status` (
+  `status_id` int(11) NOT NULL,
+  `status` varchar(25) DEFAULT NULL,
+  `color` varchar(10) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `logs`
+--
+
+CREATE TABLE `logs` (
+  `id` int(11) NOT NULL,
+  `type_id` int(11) DEFAULT 1,
+  `user_id` varchar(25) DEFAULT NULL,
+  `subject` varchar(300) DEFAULT NULL,
+  `date` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `logs`
+--
+
+INSERT INTO `logs` (`id`, `type_id`, `user_id`, `subject`, `date`) VALUES
+(160, 2, '523469219321348097', 'siema', '2025-02-28 17:39:37'),
+(161, 4, '523469219321348097', 'wyłączony', '2025-02-28 17:39:43'),
+(162, 4, '523469219321348097', 'wyłączony', '2025-02-28 17:39:45'),
+(163, 4, '523469219321348097', 'wyłączony', '2025-02-28 17:39:46'),
+(164, 4, '523469219321348097', 'wyłączony', '2025-02-28 17:39:46'),
+(165, 4, '523469219321348097', 'wyłączony', '2025-02-28 17:39:46'),
+(166, 4, '523469219321348097', 'wyłączony', '2025-02-28 17:39:46'),
+(167, 4, '523469219321348097', 'wyłączony', '2025-02-28 17:39:46'),
+(168, 4, '523469219321348097', 'wyłączony', '2025-02-28 17:39:47'),
+(169, 4, '523469219321348097', 'wyłączony', '2025-02-28 17:39:47'),
+(170, 4, '523469219321348097', 'wyłączony', '2025-02-28 17:39:52'),
+(171, 4, '523469219321348097', 'wyłączony', '2025-02-28 17:40:09'),
+(172, 4, '523469219321348097', 'wyłączony', '2025-02-28 17:40:10'),
+(173, 4, '523469219321348097', 'wyłączony', '2025-02-28 20:02:37'),
+(174, 2, '523469219321348097', 'siema', '2025-02-28 20:03:08'),
+(175, 4, '523469219321348097', 'wyłączony', '2025-02-28 20:03:10'),
+(176, 4, '523469219321348097', 'wyłączony', '2025-02-28 20:03:11'),
+(177, 4, '523469219321348097', 'wyłączony', '2025-02-28 20:03:11'),
+(178, 4, '523469219321348097', 'wyłączony', '2025-02-28 20:03:49'),
+(179, 4, '523469219321348097', 'wyłączony', '2025-02-28 20:03:50'),
+(180, 4, '523469219321348097', 'wyłączony', '2025-02-28 20:03:50'),
+(181, 4, '523469219321348097', 'wyłączony', '2025-02-28 20:04:12'),
+(182, 4, '523469219321348097', 'wyłączony', '2025-02-28 20:04:12'),
+(183, 4, '523469219321348097', 'wyłączony', '2025-02-28 20:04:13'),
+(184, 4, '523469219321348097', 'wyłączony', '2025-02-28 20:04:13'),
+(185, 4, '523469219321348097', 'wyłączony', '2025-02-28 20:04:14'),
+(186, 4, '523469219321348097', 'wyłączony', '2025-02-28 20:04:14'),
+(187, 4, '523469219321348097', 'wyłączony', '2025-02-28 20:04:15'),
+(188, 4, '523469219321348097', 'wyłączony', '2025-02-28 20:04:19'),
+(189, 4, '523469219321348097', 'wyłączony', '2025-02-28 20:05:04'),
+(190, 4, '523469219321348097', 'wyłączony', '2025-02-28 20:05:06'),
+(191, 4, '523469219321348097', 'wyłączony', '2025-02-28 20:05:06'),
+(192, 4, '523469219321348097', 'wyłączony', '2025-02-28 20:05:07'),
+(193, 4, '523469219321348097', 'wyłączony', '2025-02-28 20:05:08'),
+(194, 4, '523469219321348097', 'wyłączony', '2025-02-28 20:05:08'),
+(195, 4, '523469219321348097', 'wyłączony', '2025-02-28 20:05:24'),
+(196, 4, '523469219321348097', 'wyłączony', '2025-02-28 20:05:24'),
+(197, 4, '523469219321348097', 'wyłączony', '2025-02-28 20:05:29'),
+(198, 4, '523469219321348097', 'wyłączony', '2025-02-28 20:05:30'),
+(199, 3, '523469219321348097', '1', '2025-02-28 20:05:33'),
+(200, 3, '523469219321348097', '1', '2025-02-28 20:06:34'),
+(201, 3, '523469219321348097', '1', '2025-02-28 20:06:35'),
+(202, 3, '523469219321348097', '2323', '2025-02-28 20:06:37'),
+(203, 3, '523469219321348097', '-', '2025-02-28 20:06:54'),
+(204, 3, '523469219321348097', '-', '2025-02-28 20:08:18'),
+(205, 3, '523469219321348097', '-', '2025-02-28 20:08:19'),
+(206, 4, '523469219321348097', 'wyłączony', '2025-02-28 20:08:22'),
+(207, 4, '523469219321348097', 'wyłączony', '2025-02-28 20:08:28'),
+(208, 4, '523469219321348097', 'wyłączony', '2025-02-28 20:09:05'),
+(209, 4, '523469219321348097', 'wyłączony', '2025-02-28 20:09:05'),
+(210, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:09:13'),
+(211, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:47'),
+(212, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:47'),
+(213, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:47'),
+(214, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:47'),
+(215, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:48'),
+(216, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:48'),
+(217, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:48'),
+(218, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:48'),
+(219, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:48'),
+(220, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:48'),
+(221, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:48'),
+(222, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:49'),
+(223, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:49'),
+(224, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:49'),
+(225, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:49'),
+(226, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:49'),
+(227, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:49'),
+(228, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:49'),
+(229, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:49'),
+(230, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:49'),
+(231, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:49'),
+(232, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:50'),
+(233, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:50'),
+(234, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:50'),
+(235, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:50'),
+(236, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:50'),
+(237, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:50'),
+(238, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:50'),
+(239, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:50'),
+(240, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:50'),
+(241, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:50'),
+(242, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:51'),
+(243, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:51'),
+(244, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:51'),
+(245, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:51'),
+(246, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:51'),
+(247, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:51'),
+(248, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:51'),
+(249, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:51'),
+(250, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:52'),
+(251, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:52'),
+(252, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:52'),
+(253, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:52'),
+(254, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:52'),
+(255, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:52'),
+(256, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:52'),
+(257, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:52'),
+(258, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:52'),
+(259, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:52'),
+(260, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:53'),
+(261, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:53'),
+(262, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:53'),
+(263, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:53'),
+(264, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:53'),
+(265, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:53'),
+(266, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:53'),
+(267, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:53'),
+(268, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:53'),
+(269, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:53'),
+(270, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:53'),
+(271, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:54'),
+(272, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:54'),
+(273, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:54'),
+(274, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:10:54'),
+(275, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:11:00'),
+(276, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:11:01'),
+(277, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:11:02'),
+(278, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:11:03'),
+(279, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:11:05'),
+(280, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:11:06'),
+(281, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:11:07'),
+(282, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:11:08'),
+(283, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:11:08'),
+(284, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:11:09'),
+(285, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:11:11'),
+(286, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:11:12'),
+(287, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:11:13'),
+(288, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:11:14'),
+(289, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:11:15'),
+(290, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:11:16'),
+(291, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:11:17'),
+(292, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:11:19'),
+(293, 2, '523469219321348097', 'ELO RANDIK', '2025-02-28 20:11:19'),
+(294, 2, '523469219321348097', 'ELO RANDIKDASDA', '2025-02-28 20:11:22'),
+(295, 2, '523469219321348097', 'das', '2025-02-28 20:11:27'),
+(296, 2, '523469219321348097', 'das', '2025-02-28 20:18:26'),
+(297, 2, '523469219321348097', 'das', '2025-02-28 20:18:27'),
+(298, 2, '523469219321348097', 'das', '2025-02-28 20:18:28'),
+(299, 2, '523469219321348097', 'das', '2025-02-28 20:18:28'),
+(300, 2, '523469219321348097', 'das', '2025-02-28 20:18:29'),
+(301, 2, '523469219321348097', 'das', '2025-02-28 20:18:54'),
+(302, 2, '523469219321348097', 'das', '2025-02-28 20:18:55'),
+(303, 2, '523469219321348097', 'das', '2025-02-28 20:18:55'),
+(304, 2, '523469219321348097', 'das', '2025-02-28 20:19:19'),
+(305, 2, '523469219321348097', 'das', '2025-02-28 20:19:20'),
+(306, 2, '523469219321348097', 'das', '2025-02-28 20:19:31'),
+(307, 2, '523469219321348097', 'das', '2025-02-28 20:19:32'),
+(308, 2, '523469219321348097', 'das', '2025-02-28 20:19:33'),
+(309, 2, '523469219321348097', 'das', '2025-02-28 20:19:39'),
+(310, 2, '523469219321348097', 'das', '2025-02-28 20:19:56'),
+(311, 2, '523469219321348097', 'das', '2025-02-28 20:19:57'),
+(312, 2, '523469219321348097', 'das', '2025-02-28 20:20:56'),
+(313, 2, '523469219321348097', 'das', '2025-02-28 20:21:20'),
+(314, 2, '523469219321348097', 'das', '2025-02-28 20:21:27'),
+(315, 2, '523469219321348097', 'das', '2025-02-28 20:21:35'),
+(316, 2, '523469219321348097', 'das', '2025-02-28 20:21:40'),
+(317, 2, '523469219321348097', 'das', '2025-02-28 20:21:41'),
+(318, 2, '523469219321348097', 'das', '2025-02-28 20:21:41'),
+(319, 2, '523469219321348097', 'KURWA', '2025-02-28 20:21:44'),
+(320, 2, '523469219321348097', 'KURWA', '2025-02-28 20:21:47'),
+(321, 2, '523469219321348097', 'KURWA', '2025-02-28 20:22:19'),
+(322, 2, '523469219321348097', 'KURWA elo', '2025-02-28 20:27:02'),
+(323, 2, '523469219321348097', 'Mam dużą tęgą knagę', '2025-02-28 20:28:23'),
+(324, 2, '523469219321348097', 'Mam dużą tęgą knagę', '2025-02-28 20:28:25'),
+(325, 2, '523469219321348097', 'Mam dużą tęgą knagę', '2025-02-28 20:28:57'),
+(326, 2, '523469219321348097', 'Mam dużą tęgą knagę ELO', '2025-02-28 20:29:01'),
+(327, 3, '523469219321348097', '-', '2025-02-28 20:30:23'),
+(328, 3, '523469219321348097', '-', '2025-02-28 20:30:52'),
+(329, 3, '523469219321348097', '-', '2025-02-28 20:31:04'),
+(330, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP!', '2025-02-28 20:32:12'),
+(331, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP!\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:34:51'),
+(332, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! <br>\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:34:57'),
+(333, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! n\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:36:26'),
+(334, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! n\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:36:26'),
+(335, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! n\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:36:27'),
+(336, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! n\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:36:32'),
+(337, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! n\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:36:37'),
+(338, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! <br>\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:36:45'),
+(339, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! newline\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:36:57'),
+(340, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! <br>\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:37:19'),
+(341, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! <br>\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:37:19'),
+(342, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! <br>\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:37:19'),
+(343, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! n\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:37:23'),
+(344, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! n\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:37:33'),
+(345, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! nl\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:37:35'),
+(346, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! nl\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:37:50'),
+(347, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! nl\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:38:41'),
+(348, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! nl\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:38:58'),
+(349, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! nl\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:39:17'),
+(350, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! nl\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:39:21'),
+(351, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! nl\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:40:02'),
+(352, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! nl\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:40:15'),
+(353, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! nl\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:40:47'),
+(354, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! nl\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:40:49'),
+(355, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! nl\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:41:21'),
+(356, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! nl\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:41:23'),
+(357, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! nl\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:41:49'),
+(358, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! nl\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:42:16'),
+(359, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! nl\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:42:56'),
+(360, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! nl\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:42:57'),
+(361, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! nl\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:43:19'),
+(362, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! nl\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:43:32'),
+(363, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! nl\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:43:39'),
+(364, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! nl\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:43:47'),
+(365, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! nl\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:45:37'),
+(366, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! nl\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:45:38'),
+(367, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! nl\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:46:26'),
+(368, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! nl\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:46:51'),
+(369, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! nl\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:48:04'),
+(370, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! nl\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:49:21'),
+(371, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! nl\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:49:22'),
+(372, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! nl\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:50:19'),
+(373, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! nl\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:50:20'),
+(374, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! nl\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:50:33'),
+(375, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! nl\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:50:34'),
+(376, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! nl\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:50:41'),
+(377, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! nl\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:51:29'),
+(378, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! nl\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:51:30'),
+(379, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! nl\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:51:47'),
+(380, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! nl\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:52:23'),
+(381, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! nl\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:52:24'),
+(382, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! nl\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:52:35'),
+(383, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP! nl\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:52:36'),
+(384, 2, '523469219321348097', 'Kto nie skacze ten za pisem! HOP! HOP! HOP!\r\nJEBAC PIS JEBAC PIS GLUPIE KURWY!', '2025-02-28 20:56:21'),
+(385, 2, '523469219321348097', 'TWOJA STARA TO ORANGUTAN ELO CWELUCHU ZAPINAM CIE W DUPE JAK MURZYNA Z PORNHUBA MOZESZ OJEBAC MI PENTO JESTES DLA MNIE NIKIM ELO RANDI DAWAJ KROPKE BO CIE NIE ZNAM PYRRA YALLA LUTUJE CIE DO ZERA MIERNOTO JEBANA KUP SOBIE RECE A NIE NA STREFY LATASZ MIERNOTO PIERDOLONA PYRRA ELO ILE TEGO TEKSTU JESZC', '2025-02-28 20:57:39'),
+(386, 2, '523469219321348097', 'TWOJA STARA TO ORANGUTAN ELO CWELUCHU ZAPINAM CIE W DUPE JAK MURZYNA Z PORNHUBA MOZESZ OJEBAC MI PENTO JESTES DLA MNIE NIKIM ELO RANDI DAWAJ KROPKE BO CIE NIE ZNAM PYRRA YALLA LUTUJE CIE DO ZERA MIERNOTO JEBANA KUP SOBIE RECE A NIE NA STREFY LATASZ MIERNOTO PIERDOLONA PYRRA ELO ILE TEGO TEKSTU JESZC', '2025-02-28 20:58:32'),
+(387, 2, '523469219321348097', 'TWOJA STARA TO ORANGUTAN ELO CWELUCHU ZAPINAM CIE W DUPE JAK MURZYNA Z PORNHUBA MOZESZ OJEBAC MI PENTO JESTES DLA MNIE NIKIM ELO RANDI DAWAJ KROPKE BO CIE NIE ZNAM PYRRA YALLA LUTUJE CIE DO ZERA MIERNOTO JEBANA KUP SOBIE RECE A NIE NA STREFY LATASZ MIERNOTO PIERDOLONA PYRRA ELO ILE TEGO TEKSTU JESZC', '2025-02-28 20:58:33'),
+(388, 2, '523469219321348097', 'TWOJA STARA TO ORANGUTAN ELO CWELUCHU ZAPINAM CIE W DUPE JAK MURZYNA Z PORNHUBA MOZESZ OJEBAC MI PENTO JESTES DLA MNIE NIKIM ELO RANDI DAWAJ KROPKE BO CIE NIE ZNAM PYRRA YALLA LUTUJE CIE DO ZERA MIERNOTO JEBANA KUP SOBIE RECE A NIE NA STREFY LATASZ MIERNOTO PIERDOLONA PYRRA ELO ILE TEGO TEKSTU JESZC', '2025-02-28 20:59:01'),
+(389, 2, '523469219321348097', 'TWOJA STARA TO ORANGUTAN ELO CWELUCHU ZAPINAM CIE W DUPE JAK MURZYNA Z PORNHUBA MOZESZ OJEBAC MI PENTO JESTES DLA MNIE NIKIM ELO RANDI DAWAJ KROPKE BO CIE NIE ZNAM PYRRA YALLA LUTUJE CIE DO ZERA MIERNOTO JEBANA KUP SOBIE RECE A NIE NA STREFY LATASZ MIERNOTO PIERDOLONA PYRRA ELO ILE TEGO TEKSTU JESZC', '2025-02-28 20:59:02'),
+(390, 2, '523469219321348097', 'TWOJA STARA TO ORANGUTAN ELO CWELUCHU ZAPINAM CIE W DUPE JAK MURZYNA Z PORNHUBA MOZESZ OJEBAC MI PENTO JESTES DLA MNIE NIKIM ELO RANDI DAWAJ KROPKE BO CIE NIE ZNAM PYRRA YALLA LUTUJE CIE DO ZERA MIERNOTO JEBANA KUP SOBIE RECE A NIE NA STREFY LATASZ MIERNOTO PIERDOLONA PYRRA ELO ILE TEGO TEKSTU JESZC', '2025-02-28 20:59:02'),
+(391, 2, '523469219321348097', 'TWOJA STARA TO ORANGUTAN ELO CWELUCHU ZAPINAM CIE W DUPE JAK MURZYNA Z PORNHUBA MOZESZ OJEBAC MI PENTO JESTES DLA MNIE NIKIM ELO RANDI DAWAJ KROPKE BO CIE NIE ZNAM PYRRA YALLA LUTUJE CIE DO ZERA MIERNOTO JEBANA KUP SOBIE RECE A NIE NA STREFY LATASZ MIERNOTO PIERDOLONA PYRRA ELO ILE TEGO TEKSTU JESZC', '2025-02-28 20:59:03'),
+(392, 2, '523469219321348097', 'TWOJA STARA TO ORANGUTAN ELO CWELUCHU ZAPINAM CIE W DUPE JAK MURZYNA Z PORNHUBA MOZESZ OJEBAC MI PENTO JESTES DLA MNIE NIKIM ELO RANDI DAWAJ KROPKE BO CIE NIE ZNAM PYRRA YALLA LUTUJE CIE DO ZERA MIERNOTO JEBANA KUP SOBIE RECE A NIE NA STREFY LATASZ MIERNOTO PIERDOLONA PYRRA ELO ILE TEGO TEKSTU JESZC', '2025-02-28 20:59:05'),
+(393, 2, '523469219321348097', 'TWOJA STARA TO ORANGUTAN ELO CWELUCHU ZAPINAM CIE W DUPE JAK MURZYNA Z PORNHUBA MOZESZ OJEBAC MI PENTO JESTES DLA MNIE NIKIM ELO RANDI DAWAJ KROPKE BO CIE NIE ZNAM PYRRA YALLA LUTUJE CIE DO ZERA MIERNOTO JEBANA KUP SOBIE RECE A NIE NA STREFY LATASZ MIERNOTO PIERDOLONA PYRRA ELO ILE TEGO TEKSTU JESZC', '2025-02-28 20:59:56'),
+(394, 2, '523469219321348097', 'TWOJA STARA TO ORANGUTAN ELO CWELUCHU ZAPINAM CIE W DUPE JAK MURZYNA Z PORNHUBA MOZESZ OJEBAC MI PENTO JESTES DLA MNIE NIKIM ELO RANDI DAWAJ KROPKE BO CIE NIE ZNAM PYRRA YALLA LUTUJE CIE DO ZERA MIERNOTO JEBANA KUP SOBIE RECE A NIE NA STREFY LATASZ MIERNOTO PIERDOLONA PYRRA ELO ILE TEGO TEKSTU JESZC', '2025-02-28 21:00:07'),
+(395, 2, '523469219321348097', 'TWOJA STARA TO ORANGUTAN ELO CWELUCHU ZAPINAM CIE W DUPE JAK MURZYNA Z PORNHUBA MOZESZ OJEBAC MI PENTO JESTES DLA MNIE NIKIM ELO RANDI DAWAJ KROPKE BO CIE NIE ZNAM PYRRA YALLA LUTUJE CIE DO ZERA MIERNOTO JEBANA KUP SOBIE RECE A NIE NA STREFY LATASZ MIERNOTO PIERDOLONA PYRRA ELO ILE TEGO TEKSTU JESZC', '2025-02-28 21:00:13'),
+(396, 2, '523469219321348097', 'TWOJA STARA TO ORANGUTAN ELO CWELUCHU ZAPINAM CIE W DUPE JAK MURZYNA Z PORNHUBA MOZESZ OJEBAC MI PENTO JESTES DLA MNIE NIKIM ELO RANDI DAWAJ KROPKE BO CIE NIE ZNAM PYRRA YALLA LUTUJE CIE DO ZERA MIERNOTO JEBANA KUP SOBIE RECE A NIE NA STREFY LATASZ MIERNOTO PIERDOLONA PYRRA ELO ILE TEGO TEKSTU JESZC', '2025-02-28 21:00:18'),
+(397, 2, '523469219321348097', 'TWOJA STARA TO ORANGUTAN ELO CWELUCHU ZAPINAM CIE W DUPE JAK MURZYNA Z PORNHUBA MOZESZ OJEBAC MI PENTO JESTES DLA MNIE NIKIM ELO RANDI DAWAJ KROPKE BO CIE NIE ZNAM PYRRA YALLA LUTUJE CIE DO ZERA MIERNOTO JEBANA KUP SOBIE RECE A NIE NA STREFY LATASZ MIERNOTO PIERDOLONA PYRRA ELO ILE TEGO TEKSTU JESZC', '2025-02-28 21:01:08'),
+(398, 2, '523469219321348097', 'TWOJA STARA TO ORANGUTAN ELO CWELUCHU ZAPINAM CIE W DUPE JAK MURZYNA Z PORNHUBA MOZESZ OJEBAC MI PENTO JESTES DLA MNIE NIKIM ELO RANDI DAWAJ KROPKE BO CIE NIE ZNAM PYRRA YALLA LUTUJE CIE DO ZERA MIERNOTO JEBANA KUP SOBIE RECE A NIE NA STREFY LATASZ MIERNOTO PIERDOLONA PYRRA ELO ILE TEGO TEKSTU JESZC', '2025-02-28 21:02:26'),
+(399, 2, '523469219321348097', '', '2025-02-28 21:05:29'),
+(400, 2, '523469219321348097', '', '2025-02-28 21:06:21'),
+(401, 2, '523469219321348097', '', '2025-02-28 21:06:33'),
+(402, 2, '523469219321348097', '', '2025-02-28 21:06:46'),
+(403, 7, '523469219321348097', '1120208619103867021', '2025-03-01 22:26:10'),
+(404, 7, '523469219321348097', '1120208619103867021', '2025-03-01 22:26:27'),
+(405, 7, '523469219321348097', '1120208619103867021', '2025-03-01 22:27:53'),
+(406, 2, '523469219321348097', '', '2025-03-01 22:41:25'),
+(407, 2, '523469219321348097', '', '2025-03-01 22:44:49'),
+(408, 3, '523469219321348097', '-', '2025-03-01 22:44:53'),
+(409, 7, '523469219321348097', '257609000584085535', '2025-03-01 22:44:59'),
+(410, 6, '523469219321348097', '1324012312688070657', '2025-03-01 22:52:38'),
+(411, 7, '523469219321348097', '1120208619103867021 / email: Nieznane / rola: 2', '2025-03-02 13:38:01'),
+(412, 2, '523469219321348097', 'Kitraj fajka to cwel głupi', '2025-03-02 16:06:21'),
+(413, 7, '523469219321348097', '1324012312688070657 / email: Nieznane => Nieznane / rola: 1 => 3', '2025-03-02 16:48:14'),
+(414, 2, '523469219321348097', '', '2025-03-02 17:19:56'),
+(415, 7, '523469219321348097', '257609000584085535 / email: budaj2047@gmail.com => budaj2047@gmail.com / rola: 1 => 1', '2025-03-02 20:34:35'),
+(416, 7, '523469219321348097', '257609000584085535 / email: budaj2047@gmail.com => budaj2047@gmail.com / rola: 1 => 1', '2025-03-02 20:34:36'),
+(417, 7, '523469219321348097', '257609000584085535 / email: budaj2047@gmail.com => budaj2047@gmail.com / rola: 1 => 1', '2025-03-02 20:34:38'),
+(418, 7, '523469219321348097', '257609000584085535 / email: budaj2047@gmail.com => budaj2047@gmail.com / rola: 1 => 1', '2025-03-02 20:34:42'),
+(419, 7, '523469219321348097', '257609000584085535 / email: budaj2047@gmail.com =>  / rola: 1 => 1', '2025-03-02 20:49:05'),
+(420, 7, '523469219321348097', '257609000584085535 / email: budaj2047@gmail.com => budaj2047@gmail.com / rola: 1 => 1', '2025-03-02 20:49:52'),
+(421, 6, '523469219321348097', '691407529619619862', '2025-03-03 17:19:43'),
+(422, 8, '523469219321348097', '691407529619619862', '2025-03-03 17:19:54'),
+(423, 6, '523469219321348097', '691407529619619862', '2025-03-03 17:21:28'),
+(424, 8, '523469219321348097', '691407529619619862', '2025-03-03 17:21:35'),
+(425, 5, '523469219321348097', '523469219321348097', '2025-03-03 17:24:01'),
+(426, 6, '523469219321348097', '691407529619619862', '2025-03-03 17:45:28'),
+(427, 5, '523469219321348097', '691407529619619862', '2025-03-03 17:45:33'),
+(428, 7, '523469219321348097', '691407529619619862 / email: Nieznane =>  / rola: 1 => 1', '2025-03-03 17:48:44'),
+(429, 7, '523469219321348097', '691407529619619862 / email: Nieznane =>  / rola: 1 => 1', '2025-03-03 17:48:54'),
+(430, 7, '523469219321348097', '691407529619619862 / email: Nieznane =>  / rola: 1 => 3', '2025-03-03 17:48:59'),
+(431, 7, '523469219321348097', '691407529619619862 / email: Nieznane =>  / rola: 3 => 1', '2025-03-03 17:49:02'),
+(432, 7, '523469219321348097', '691407529619619862 / email: Nieznane =>  / rola: 1 => 1', '2025-03-03 17:49:14'),
+(433, 7, '523469219321348097', '691407529619619862 / email: Nieznane =>  / rola: 1 => 1', '2025-03-03 17:49:14'),
+(434, 7, '523469219321348097', '691407529619619862 / email: Nieznane =>  / rola: 1 => 1', '2025-03-03 17:49:15'),
+(435, 4, '523469219321348097', 'wyłączony', '2025-03-03 19:37:16'),
+(436, 4, '523469219321348097', 'wyłączony', '2025-03-03 19:37:24'),
+(437, 2, '523469219321348097', '.', '2025-03-03 19:37:40'),
+(438, 2, '523469219321348097', '', '2025-03-03 19:37:46'),
+(439, 7, '523469219321348097', '1324012312688070657 / email: natanledjeg@gmail.com => natanledjeg@gmail.com / rola: 3 => 6', '2025-03-04 17:54:52'),
+(440, 2, '1324012312688070657', 'Janek Soluch to cwel', '2025-03-04 17:55:20'),
+(441, 2, '1324012312688070657', '.', '2025-03-04 17:55:31'),
+(442, 2, '1324012312688070657', '', '2025-03-04 17:55:33'),
+(443, 2, '1324012312688070657', 'jebac cie janek', '2025-03-04 17:56:18'),
+(444, 11, '523469219321348097', '2', '2025-03-04 18:42:53'),
+(445, 2, '523469219321348097', '', '2025-03-04 22:00:46'),
+(446, 5, '523469219321348097', '523469219321348097', '2025-03-09 14:29:59'),
+(447, 2, '523469219321348097', 'test', '2025-03-17 19:42:05'),
+(448, 2, '523469219321348097', '<u>test</u>', '2025-03-17 19:51:57'),
+(449, 2, '523469219321348097', '<a href=\"terms.php\">Aktualizujemy nasze warunki korzystania z usługi</a>', '2025-03-17 19:53:43'),
+(450, 2, '523469219321348097', '<a href=\"terms.php\">Aktualizujemy nasze warunki korzystania z usługi</a> <script>alert(\"nigger\")</script>', '2025-03-17 20:02:00'),
+(451, 2, '523469219321348097', 'Auf der Heide blüht ein kleines Blümelein\r\nUnd das heißt\r\nErika\r\nHeiß von hunderttausend kleinen Bienelein\r\nWird umschwärmt\r\nErika\r\nDenn ihr Herz ist voller Süßigkeit\r\nZarter Duft entströmt dem Blütenkleid\r\nAuf der Heide blüht ein kleines Blümelein\r\nUnd das heißt\r\nErika\r\nIn der Heimat wohnt ein blon', '2025-03-17 20:04:29'),
+(452, 2, '523469219321348097', 'aha', '2025-03-17 20:09:25'),
+(453, 2, '523469219321348097', 'aha', '2025-03-17 23:09:19'),
+(454, 2, '523469219321348097', '<b>Coroliov to głupi cwel</b> <a href=\"google.com\">Jebac go w dupe</a>', '2025-03-22 18:13:28'),
+(455, 2, '523469219321348097', '<b>Coroliov to głupi cwel</b> <a href=\"https://google.com\">Jebac go w dupe</a>', '2025-03-22 18:13:46');
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `logs_types`
+--
+
+CREATE TABLE `logs_types` (
+  `id` int(11) NOT NULL,
+  `type` varchar(50) DEFAULT NULL,
+  `icon` varchar(50) DEFAULT NULL,
+  `color` varchar(25) DEFAULT NULL,
+  `message` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `logs_types`
+--
+
+INSERT INTO `logs_types` (`id`, `type`, `icon`, `color`, `message`) VALUES
+(1, 'nieokreślono', 'bx-question-mark', 'gray', 'Nie określono wiadomości dla tego typu zapisu'),
+(2, 'ustaw_ogłoszenie', 'bx-bell', 'primary', '{user_id} zmienił treść ogłoszenia na: {subject}'),
+(3, 'ustaw_klucz_obejścia', 'bx-key', 'primary', '{user_id} zmienił klucz obejścia na: {subject}'),
+(4, 'ustaw_tryb_konwerwacji', 'bx-lock-alt', 'primary', '{user_id} zmienił tryb konserwacji na: {subject}'),
+(5, 'aktualizuj_użytkownika', 'bx-user-check', 'primary', '{user_id} aktualizował użytkownika o id: {subject}'),
+(6, 'dodaj_użytkownika', 'bx-user-plus', 'green', '{user_id} dodał użytkownika o id: {subject}'),
+(7, 'edytuj_użytkownika', 'bx-user', 'orange', '{user_id} edytował użytkownika o id: {subject}'),
+(8, 'usuń_użytkownika', 'bx-user-minus', 'red', '{user_id} edytował użytkownika o id: {subject}'),
+(9, 'nadaj_blokade', 'bx-shield-plus', 'green', '{user_id} nadał blokadę o id: {subject}'),
+(10, 'edytuj_blokade', 'bx-shield-alt-2', 'orange', '{user_id} edytował blokadę o id: {subject}'),
+(11, 'unieważnij_blokade', 'bx-shield-minus', 'red', '{user_id} unieważnił blokadę o id: {subject}'),
+(12, 'nadaj_ostrzeżenie', 'bx-shield-plus', 'green', '{user_id} nadał ostrzeżenie o id: {subject}'),
+(13, 'edytuj_ostrzeżenie', 'bx-shield-alt-2', 'orange', '{user_id} edytował ostrzeżenie o id: {subject}'),
+(14, 'unieważnij_ostrzeżenie', 'bx-shield-minus', 'red', '{user_id} unieważnił ostrzeżenie o id: {subject}');
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `punishment_status`
+--
+
+CREATE TABLE `punishment_status` (
+  `status_id` int(11) NOT NULL,
+  `status` varchar(25) DEFAULT NULL,
+  `color` varchar(10) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `punishment_status`
+--
+
+INSERT INTO `punishment_status` (`status_id`, `status`, `color`) VALUES
+(1, 'AKTYWNE', 'green'),
+(2, 'UNIEWAŻNIONE', 'red'),
+(3, 'WYGASŁE', 'orange');
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `roles`
+--
+
+CREATE TABLE `roles` (
+  `role_id` int(11) NOT NULL,
+  `role_name` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `roles`
+--
+
+INSERT INTO `roles` (`role_id`, `role_name`) VALUES
+(1, 'Citizen of USA'),
+(2, 'Academy Training Officer'),
+(3, 'Academy Management Unit'),
+(4, 'TD Command'),
+(5, 'LSPD Command'),
+(6, 'General Director'),
+(7, 'Administrator');
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `settings`
+--
+
+CREATE TABLE `settings` (
+  `id` int(11) NOT NULL,
+  `setting` varchar(25) DEFAULT NULL,
+  `value` varchar(300) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `settings`
+--
+
+INSERT INTO `settings` (`id`, `setting`, `value`) VALUES
+(1, 'maintenance_mode', '0'),
+(2, 'maintenance_password', 'WaitRPLSPD2025'),
+(3, 'announcement', '<b>Strona jest w trakcie prac, wszystkie błędy należy natychmiastowo zgłaszać administratorowi.</b> Zapoznaj się z <a href=\'terms.php\'>warunkami korzystania z usługi</a>');
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `suspensions`
+--
+
+CREATE TABLE `suspensions` (
+  `suspension_id` int(11) NOT NULL,
+  `status_id` int(11) DEFAULT 1,
+  `user_id` varchar(25) NOT NULL,
+  `issuer_id` varchar(25) DEFAULT NULL,
+  `revoker_id` varchar(25) DEFAULT NULL,
+  `reason` varchar(300) DEFAULT 'Nie określono powodu',
+  `is_permanent` tinyint(1) DEFAULT 1,
+  `expires_at` datetime DEFAULT NULL,
+  `issued_at` datetime DEFAULT current_timestamp(),
+  `revoked_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `suspensions`
+--
+
+INSERT INTO `suspensions` (`suspension_id`, `status_id`, `user_id`, `issuer_id`, `revoker_id`, `reason`, `is_permanent`, `expires_at`, `issued_at`, `revoked_at`) VALUES
+(2, 2, '523469219321348097', '257609000584085535', '523469219321348097', 'TEST', 1, '2025-02-08 14:57:38', '2025-02-08 13:54:04', '2025-03-04 18:42:53');
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `users`
+--
+
+CREATE TABLE `users` (
+  `id` varchar(25) NOT NULL,
+  `username` varchar(50) DEFAULT NULL,
+  `displayname` varchar(50) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `avatar` varchar(40) DEFAULT NULL,
+  `role_id` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `last_update` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `username`, `displayname`, `email`, `avatar`, `role_id`, `created_at`, `last_update`) VALUES
+('0', 'SYSTEM', 'SYSTEM', NULL, NULL, NULL, NULL, NULL),
+('1120208619103867021', 'bodu_', 'bodu', 'Nieznane', '80d4fd1a5c6ef347fad830e2248e4532', 2, '2025-02-28 12:25:11', '2025-03-02 13:38:01'),
+('1127156565120647178', 'pawelo6065', 'pawelo', 'fsierko@gmail.com', 'ea7a61daeba7ff98515b01154cd4cc27', 5, '2025-02-02 21:57:30', '2025-02-02 21:57:36'),
+('1324012312688070657', 'natan_ciapak', 'Natan', 'natanledjeg@gmail.com', '309dd9e7ee2be6a980143cfa233eeebb', 6, '2025-03-01 22:52:38', '2025-03-04 17:54:52'),
+('257609000584085535', 'kubaaa_12', '𝙅𝙖𝙠𝙪𝙗', 'budaj2047@gmail.com', 'a_8e22e1a887c34fcb9bbdf4c32c059450', 1, '2025-02-02 21:54:36', '2025-03-02 20:49:52'),
+('523469219321348097', 'pieselak', 'Pieselak', 'znamirowskipatryk@gmail.com', '81a7d0514d06c837125deaa367be1c76', 6, '2025-02-02 13:38:40', '2025-03-31 20:45:23'),
+('685862269174677639', 'coroliov', 'Coroliov', 'Nieznane', 'f98ad24a416444726635703a87f30c0d', 5, '2025-02-01 22:54:04', '2025-02-28 14:29:04'),
+('691407529619619862', '_kapselek_222', 'ᴋᴀᴘꜱᴇʟᴇᴋ', 'Nieznane', 'a_648dfe41000809f0fae46b4fec348423', 1, '2025-03-03 17:45:28', '2025-03-03 17:49:15'),
+('707213842979225600', '.koala888', '.𝓚𝓸𝓪𝓵𝓪ღ', 'Nieznane', 'fc2dfec44f4c941b10d93f09e18b7e7f', 5, '2025-02-02 22:00:15', '2025-02-28 16:52:51'),
+('908041514498813963', 'k3xel', 'K3xeL', 'ikexei.lh@gmail.com', 'a_74bf275c4da9d07d904a99f2f9c79740', 5, '2025-02-01 20:13:01', '2025-02-28 13:28:39');
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `users_logins`
+--
+
+CREATE TABLE `users_logins` (
+  `login_id` int(11) NOT NULL,
+  `user_id` varchar(25) DEFAULT NULL,
+  `login_session` varchar(255) DEFAULT NULL,
+  `login_session_deactive` tinyint(1) DEFAULT 0,
+  `login_ip` varchar(15) DEFAULT NULL,
+  `login_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `users_logins`
+--
+
+INSERT INTO `users_logins` (`login_id`, `user_id`, `login_session`, `login_session_deactive`, `login_ip`, `login_date`) VALUES
+(35, '523469219321348097', 'i0hpvcnbnp34c24qlsbig4c23c', 0, '::1', '2025-03-23 14:18:45'),
+(36, '523469219321348097', '4jiu94j0hoqqfe30nppvil6srn', 0, '::1', '2025-03-31 20:45:23');
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `warnings`
+--
+
+CREATE TABLE `warnings` (
+  `warning_id` int(11) NOT NULL,
+  `status_id` int(11) DEFAULT 1,
+  `user_id` varchar(25) DEFAULT NULL,
+  `issuer_id` varchar(25) DEFAULT NULL,
+  `revoker_id` varchar(25) DEFAULT NULL,
+  `reason` varchar(300) DEFAULT 'Nie określono powodu',
+  `is_accepted` tinyint(1) DEFAULT 0,
+  `issued_at` datetime DEFAULT current_timestamp(),
+  `revoked_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `warnings`
+--
+
+INSERT INTO `warnings` (`warning_id`, `status_id`, `user_id`, `issuer_id`, `revoker_id`, `reason`, `is_accepted`, `issued_at`, `revoked_at`) VALUES
+(1, NULL, '523469219321348097', NULL, NULL, 'Nie określono powodu', 1, NULL, NULL),
+(2, NULL, '523469219321348097', NULL, NULL, 'Nie określono powodu', 1, NULL, NULL),
+(3, NULL, '523469219321348097', NULL, NULL, 'Nie określono powodu', 1, NULL, NULL);
+
+--
+-- Indeksy dla zrzutów tabel
+--
+
+--
+-- Indeksy dla tabeli `academies`
+--
+ALTER TABLE `academies`
+  ADD PRIMARY KEY (`academy_id`),
+  ADD KEY `status_id` (`status_id`),
+  ADD KEY `creator_id` (`creator_id`);
+
+--
+-- Indeksy dla tabeli `academies_status`
+--
+ALTER TABLE `academies_status`
+  ADD PRIMARY KEY (`status_id`);
+
+--
+-- Indeksy dla tabeli `applications`
+--
+ALTER TABLE `applications`
+  ADD PRIMARY KEY (`application_id`),
+  ADD KEY `status_id` (`status_id`),
+  ADD KEY `academy_id` (`academy_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `reviewer_id` (`reviewer_id`);
+
+--
+-- Indeksy dla tabeli `applications_status`
+--
+ALTER TABLE `applications_status`
+  ADD PRIMARY KEY (`status_id`);
+
+--
+-- Indeksy dla tabeli `logs`
+--
+ALTER TABLE `logs`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `type_id` (`type_id`);
+
+--
+-- Indeksy dla tabeli `logs_types`
+--
+ALTER TABLE `logs_types`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeksy dla tabeli `punishment_status`
+--
+ALTER TABLE `punishment_status`
+  ADD PRIMARY KEY (`status_id`);
+
+--
+-- Indeksy dla tabeli `roles`
+--
+ALTER TABLE `roles`
+  ADD PRIMARY KEY (`role_id`);
+
+--
+-- Indeksy dla tabeli `settings`
+--
+ALTER TABLE `settings`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeksy dla tabeli `suspensions`
+--
+ALTER TABLE `suspensions`
+  ADD PRIMARY KEY (`suspension_id`),
+  ADD KEY `issuer_id` (`issuer_id`),
+  ADD KEY `revoker_id` (`revoker_id`),
+  ADD KEY `status_id` (`status_id`);
+
+--
+-- Indeksy dla tabeli `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_role` (`role_id`);
+
+--
+-- Indeksy dla tabeli `users_logins`
+--
+ALTER TABLE `users_logins`
+  ADD PRIMARY KEY (`login_id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Indeksy dla tabeli `warnings`
+--
+ALTER TABLE `warnings`
+  ADD PRIMARY KEY (`warning_id`),
+  ADD KEY `status_id` (`status_id`),
+  ADD KEY `issuer_id` (`issuer_id`),
+  ADD KEY `revoker_id` (`revoker_id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `academies`
+--
+ALTER TABLE `academies`
+  MODIFY `academy_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `academies_status`
+--
+ALTER TABLE `academies_status`
+  MODIFY `status_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `applications`
+--
+ALTER TABLE `applications`
+  MODIFY `application_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `applications_status`
+--
+ALTER TABLE `applications_status`
+  MODIFY `status_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `logs`
+--
+ALTER TABLE `logs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=456;
+
+--
+-- AUTO_INCREMENT for table `logs_types`
+--
+ALTER TABLE `logs_types`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- AUTO_INCREMENT for table `settings`
+--
+ALTER TABLE `settings`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `users_logins`
+--
+ALTER TABLE `users_logins`
+  MODIFY `login_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+
+--
+-- AUTO_INCREMENT for table `warnings`
+--
+ALTER TABLE `warnings`
+  MODIFY `warning_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `academies`
+--
+ALTER TABLE `academies`
+  ADD CONSTRAINT `academies_ibfk_1` FOREIGN KEY (`status_id`) REFERENCES `academies_status` (`status_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `academies_ibfk_2` FOREIGN KEY (`creator_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Constraints for table `applications`
+--
+ALTER TABLE `applications`
+  ADD CONSTRAINT `applications_ibfk_1` FOREIGN KEY (`status_id`) REFERENCES `applications_status` (`status_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `applications_ibfk_2` FOREIGN KEY (`academy_id`) REFERENCES `academies` (`academy_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `applications_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `applications_ibfk_4` FOREIGN KEY (`reviewer_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Constraints for table `logs`
+--
+ALTER TABLE `logs`
+  ADD CONSTRAINT `logs_ibfk_1` FOREIGN KEY (`type_id`) REFERENCES `logs_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `suspensions`
+--
+ALTER TABLE `suspensions`
+  ADD CONSTRAINT `suspensions_ibfk_1` FOREIGN KEY (`issuer_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `suspensions_ibfk_2` FOREIGN KEY (`revoker_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `suspensions_ibfk_3` FOREIGN KEY (`status_id`) REFERENCES `punishment_status` (`status_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Constraints for table `users`
+--
+ALTER TABLE `users`
+  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Constraints for table `users_logins`
+--
+ALTER TABLE `users_logins`
+  ADD CONSTRAINT `users_logins_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `warnings`
+--
+ALTER TABLE `warnings`
+  ADD CONSTRAINT `warnings_ibfk_1` FOREIGN KEY (`status_id`) REFERENCES `punishment_status` (`status_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `warnings_ibfk_2` FOREIGN KEY (`issuer_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `warnings_ibfk_3` FOREIGN KEY (`revoker_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `warnings_ibfk_4` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+DELIMITER $$
+--
+-- Events
+--
+CREATE DEFINER=`root`@`localhost` EVENT `cleanup_old_logins` ON SCHEDULE EVERY 1 DAY STARTS '2025-03-22 19:08:07' ON COMPLETION NOT PRESERVE ENABLE DO UPDATE users_logins SET login_ip = 'Usunięto' 
+    WHERE login_date < DATE_SUB(NOW(), INTERVAL 90 DAY) 
+    AND login_ip != 'Usunięto'$$
+
+DELIMITER ;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
