@@ -13,7 +13,7 @@
     <body>
         <?php include ("components/header.php") ?>
         <?php include ("components/announcement.php") ?>
-
+        
         <main>
             <div class="background"></div>
             <div class="page">

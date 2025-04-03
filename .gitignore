@@ -1,6 +1,7 @@
 # Configuration files with sensitive information
 /php/config.php
 .env
+.sql
 
 # System and IDE files
 .DS_Store
