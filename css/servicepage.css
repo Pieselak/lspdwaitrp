@@ -44,6 +44,12 @@
   border-radius: 0.5rem;
 }
 
+.page .service .content .info .divider {
+  width: 100%;
+  height: 1px;
+  background-color: var(--color-background2);
+}
+
 .page .service .content .info div {
   display: flex;
   justify-content: center;

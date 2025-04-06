@@ -1,7 +1,7 @@
 <?php 
     include_once ("php/functions.php");
-    $redirect = $_GET["redirect"] ?? null;
-    $_SESSION["redirect"] = $redirect;
+    $redirect = $_SESSION["loginRedirect"] ?? null;
+    $error = $_SESSION["loginError"] ?? null;
     
     $user = $_SESSION["user"] ?? null;
     checkMaintenance();
@@ -25,6 +25,9 @@
                     </div>
 
                     <div class="content">
+                        <?php if ($error): ?>
+                            <p class="status red"><?= $error ?></p>
+                        <?php endif; ?>
                         <?php if ($user): ?>
                             <p>Jesteś zalogowany jako @<?= $user["username"] ?></p>
                             <a href="logout.php" class="button">Wyloguj się</a>

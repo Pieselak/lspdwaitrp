@@ -139,7 +139,7 @@ function setSetting($setting, $value) {
 function checkMaintenance() {
     $status = getSetting("maintenance_mode");
     $password = getSetting("maintenance_password");
-    $userPassword = $_SESSION["maintenance_password"] ?? null;
+    $userPassword = $_SESSION["maintenancePassword"] ?? null;
 
     if ($status["success"] && $password["success"]) {
         if ($status["message"] == "1" && $password["message"] != $userPassword) {
@@ -496,6 +496,38 @@ function refreshUser() {
 
 // Login functions
 
+function checkUserLogin() {
+    global $conn;
+
+    if (!isset($_SESSION["user"])) {
+        return ["success" => false, "message" => "Nie znaleziono sesji użytkownika"];
+    }
+
+    $sessionId = session_id();
+    $clientIp = getClientIP();
+
+    $stmt = $conn->prepare("SELECT * FROM users_logins WHERE login_session = ? AND login_ip = ?");
+    $stmt->bind_param("ss", $sessionId, $clientIp);
+    $stmt->execute();
+    if ($stmt->errno) {
+        error_log("MySQL error: " . $stmt->error);
+        return ["success" => false, "message" => "Wystąpił błąd podczas sprawdzania sesji użytkownika"];
+    }
+    $result = $stmt->get_result();
+    $stmt->close();
+
+    if ($result->num_rows == 0) {
+        return ["success" => false, "message" => "Nie znaleziono sesji użytkownika"];
+    }
+
+    $row = $result->fetch_assoc();
+    if ($row["login_session_active"] == false) {
+        return ["success" => false, "message" => "Sesja użytkownika została dezaktywowana"];
+    }
+
+    return ["success" => true, "message" => "Znaleziono sesję użytkownika"];
+}
+
 function addLogin($id) {
     global $conn;
 
@@ -555,7 +587,7 @@ function getLogins($userid) {
             'id' => $row["id"],
             'user_id' => $row["user_id"],
             'login_session' => $row["login_session"],
-            'login_session_deactivate' => $row["login_session_deactivate"],
+            'login_session_active' => $row["login_session_active"],
             'login_ip' => $row["login_ip"],
             'login_date' => $row["login_date"],
         ];
@@ -627,7 +659,7 @@ function loginUser($user, $guilds, $redirect = null) {
     $_SESSION["guilds"] = $guilds;
 
     redirectTo($redirect);
-    $_SESSION["redirect"] = null;
+    $_SESSION["loginRedirect"] = null;
     return ["success" => true, "message" => "Zalogowano użytkownika"];
 }
 
@@ -647,11 +679,23 @@ function isUserLogged() {
 }
 
 function validateUserBasic($redirect = null) {
-    if (!refreshUser()["success"]) {
-        redirectTo("login.php?redirect=" . urlencode($redirect));
+    $refresh = refreshUser();
+    if (!$refresh["success"]) {
+        $_SESSION["loginRedirect"] = $redirect;
+        $_SESSION["loginError"] = $refresh["message"];
+        redirectTo("logout.php");
     }
 
-    unset($_SESSION["access_error"]);
+    $check = checkUserLogin();
+    if (!$check["success"]) {
+        $_SESSION["loginRedirect"] = $redirect;
+        $_SESSION["loginError"] = $check["message"];
+        redirectTo("logout.php");
+    }
+
+    unset($_SESSION["accessError"]);
+    unset($_SESSION["loginError"]);
+    unset($_SESSION["loginRedirect"]);
     $user = $_SESSION["user"];
     $requiredFields = ["id", "username", "displayname", "avatar", "email", "created_at", "last_login", "last_update", "role_id", "role_name"];
 
@@ -668,16 +712,15 @@ function validateUser($redirect = null) {
     $user = validateUserBasic($redirect);
 
     if ($user["role_id"] == 0) {
-        $_SESSION["access_error"] = "Posiadasz niepoprawną rolę użytkownika<br><a href='https://discord.gg/ZfaDufhDj9'>Skontaktuj się z administratorem</a>";
-        redirectTo("noacccess.php");
+        $_SESSION["accessError"] = "Posiadasz niepoprawną rolę użytkownika<br><a href='https://discord.gg/ZfaDufhDj9'>Skontaktuj się z administratorem</a>";
+        redirectTo("noaccess.php");
     }
 
     $suspensions = getUserSuspensions($user["id"]);
     if ($suspensions["success"] && $suspensions["suspensions"]) {
         foreach ($suspensions["suspensions"] as $suspension) {
             if ($suspension["statusId"] == 1) {
-                $_SESSION["access_error"] = "Twoje konto zostało zawieszone<br><a href='https://discord.gg/ZfaDufhDj9'>Skontaktuj się z administratorem</a>";
-                redirectTo("suspension.php");
+                redirectTo("suspended.php");
             }
         }
     }
@@ -686,7 +729,6 @@ function validateUser($redirect = null) {
     if ($warnings["success"] && $warnings["warnings"]) {
         foreach ($warnings["warnings"] as $suspension) {
             if ($suspension["statusId"] == 1 && $suspension["isAccepted"] == 0) {
-                $_SESSION["access_error"] = "Twoje konto otrzymało ostrzeżenie<br><a href='https://discord.gg/ZfaDufhDj9'>Skontaktuj się z administratorem</a>";
                 redirectTo("warning.php");
             }
         }
@@ -729,7 +771,7 @@ function checkUserPermission($category, $permission) {
 function validateUserAccess($permission, $redirectLogin = null, $redirectNoAccess = true) {
     $user = validateUser($redirectLogin);
     if (!checkUserPageAccess($permission, false)) {
-        $_SESSION["access_error"] = "Nie posiadasz odpowiednich uprawnień do wyświetlenia tej strony!";
+        $_SESSION["accessError"] = "Nie posiadasz odpowiednich uprawnień do wyświetlenia tej strony!";
         if ($redirectNoAccess) {
             redirectTo("noaccess.php");
         }
@@ -973,7 +1015,7 @@ function acceptWarning($warningId) {
         return ["success" => false, "message" => "Ostrzeżenie o ID $warningId nie istnieje"];
     }
     if ($warning["warning"]["isAccepted"] == true) {
-        return ["success" => false, "message" => "Ostrzeżenie o ID $warningId zostało już zaakceptoowane"];
+        return ["success" => false, "message" => "Ostrzeżenie o ID $warningId zostało już zaakceptowane"];
     }
     if ($warning["warning"]["statusId"] == 2) {
         return ["success" => false, "message" => "Ostrzeżenie o ID $warningId zostało unieważnione"];

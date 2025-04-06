@@ -5,8 +5,8 @@
     </div>
     <div class="content">
         <p>Przepraszamy, ale nie masz dostępu do tej strony</p>
-        <?php if(isset($_SESSION["access_error"])): ?>
-            <p class='info'><?= $_SESSION["access_error"] ?></p>
+        <?php if(isset($_SESSION["accessError"])): ?>
+            <p class='status red'><?= $_SESSION["accessError"] ?></p>
         <?php endif; ?>
     </div>
     <div class="buttons">

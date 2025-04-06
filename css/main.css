@@ -153,12 +153,18 @@ h5.text3 {
 
 .status {
   display: inline-block;
-  padding: 0.25rem;
-  border-radius: 0.25rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
   font-weight: 700;
+  text-align: center;
 
   color: var(--color-text);
   background-color: var(--color-background2);
+}
+
+.status.small {
+  padding: 0.25rem;
+  border-radius: 0.25rem;
 }
 
 .status.red {

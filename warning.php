@@ -11,7 +11,7 @@
             if ($accept["success"]) {
                 redirectTo("index.php");
             } else {
-                $_SESSION["warning_error"] = $accept["message"];
+                $error = $accept["message"];
             }
         }
     }
@@ -52,15 +52,15 @@
                         <h4 class="text2">Otrzymanie kolejnych ostrzeżeń może skutkować zawieszeniem Twojego konta.</h4>
                     </div>
                     <div class="content">
-                        <?php if (isset($_SESSION["warning_error"])): ?>
+                        <?php if (isset($error)): ?>
                             <div class="info">
-                                <p><?= $_SESSION["warning_error"] ?></p>
+                                <p><?= $error ?></p>
                             </div>
-                        <?php unset($_SESSION["warning_error"]); endif; ?>
+                        <?php endif; ?>
                         <div class="info">
                             <div>
                                 <p class="small">Identyfikator:</p>
-                                <p><?= $warning["warningId"] ?> | @<?= $warning["userUsername"] ?></p>
+                                <p>#<?= $warning["warningId"] ?> | @<?= $warning["userUsername"] ?></p>
                             </div>
                             <div>
                                 <p class="small">Powód:</p>

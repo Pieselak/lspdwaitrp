@@ -5,13 +5,11 @@
         redirectTo("index.php");
     }
 
-    $error = null;
-    $showForm = true;
     $cooldown = 60;
-    $maxTries = 3;
-    if (!isset($_SESSION["maintenance_tries"]) || !isset($_SESSION["maintenance_cooldown"])) {
-        $_SESSION["maintenance_tries"] = 0;
-        $_SESSION["maintenance_cooldown"] = 0;
+    $maxAttemps = 3;
+    if (!isset($_SESSION["maintenanceAttemps"]) || !isset($_SESSION["maintenanceCooldown"])) {
+        $_SESSION["maintenanceAttemps"] = 0;
+        $_SESSION["maintenanceCooldown"] = 0;
     }
 
     if (isset($_POST["password"])) {
@@ -19,26 +17,27 @@
         if (!$maintenancePassword["success"]) {
             $error = "Błąd odczytu hasła dostępu";
         } elseif ($_POST["password"] == $maintenancePassword["message"]) {
-            $_SESSION["maintenance_password"] = $_POST["password"];
+            $_SESSION["maintenancePassword"] = $_POST["password"];
             redirectTo("index.php");
         } else {
             $error = "Nieprawidłowe hasło dostępu";
 
-            if ($_SESSION["maintenance_tries"] < $maxTries && $_SESSION["maintenance_cooldown"] < time()) {
-                $_SESSION["maintenance_tries"]++;
+            if ($_SESSION["maintenanceAttemps"] < $maxAttemps && $_SESSION["maintenanceCooldown"] < time()) {
+                $_SESSION["maintenanceAttemps"]++;
             }
 
-            if ($_SESSION["maintenance_tries"] >= $maxTries) {
-                $_SESSION["maintenance_tries"] = 0;
-                $_SESSION["maintenance_cooldown"] = time() + $cooldown;
+            if ($_SESSION["maintenanceAttemps"] >= $maxAttemps) {
+                $_SESSION["maintenanceAttemps"] = 0;
+                $_SESSION["maintenanceCooldown"] = time() + $cooldown;
                 redirectTo("maintenance.php");
             }
         }
     }
 
-    if ($_SESSION["maintenance_cooldown"] > time()) {
-        $showForm = false;
-        $error = "Przekroczono limit prób, spróbuj ponownie o " . date("H:i:s", $_SESSION["maintenance_cooldown"]);
+    if ($_SESSION["maintenanceCooldown"] > time()) {
+        $timeout = $_SESSION["maintenanceCooldown"] - time();
+        $error = "Przekroczono limit prób, spróbuj ponownie za " . $timeout . " sekund";
+        $disabled = true;
     }
 ?>
 <!DOCTYPE html>
@@ -46,6 +45,30 @@
     <head>
         <?php include ("components/head.php") ?>
     </head>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let timeout = <?= isset($timeout) ? $timeout : "0" ?>;
+            const error = <?= isset($error) ? json_encode($error) : "null" ?>;
+            const info = document.getElementById("status");
+            const submit = document.getElementById("submit");
+
+            if (error && timeout > 0 && info && submit) {
+                try {
+                    setInterval(() => {
+                        timeout--;
+                        if (timeout <= 0) {
+                            info.remove();
+                            submit.disabled = false;
+                        } else {
+                            info.innerHTML = "Przekroczono limit prób, spróbuj ponownie za " + timeout + " sekund";
+                        }
+                    }, 1000);
+                } catch (err) {
+                    console.error(err);
+                }
+            }
+        });
+    </script>
     <body>
         <?php include ("components/header.php") ?>
         <?php include ("components/announcement.php") ?>
@@ -61,16 +84,14 @@
                     <div class="content">
                         <p>Przepraszamy za wszelkie niedogodności, prosimy spróbować ponownie później.</p>
                         <?php if (isset($error)): ?>
-                            <p class="info"><?= $error ?></p>
+                            <p id="status" class="status red"><?= $error ?></p>
                         <?php endif; ?>
                     </div>
                     <div class="buttons">
-                        <?php if ($showForm): ?>
                         <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post">
                             <input type="password" name="password" placeholder="Hasło dostępu" required>
-                            <button type="submit" class="button">Odblokuj dostęp</button>
+                            <input type="submit" id="submit" value="Odblokuj dostęp" <?= isset($disabled) ? "disabled" : "" ?>>
                         </form>
-                        <?php endif; ?>
                     </div>
                 </div>
             </div>

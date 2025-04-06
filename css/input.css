@@ -23,29 +23,6 @@ select {
   transition: all 0.25s;
 }
 
-select option {
-  background-color: var(--color-background3);
-  color: var(--color-text);
-}
-
-select option:disabled {
-  color: var(--color-text2);
-}
-
-input[type="text"]:disabled,
-input[type="password"]:disabled,
-input[type="email"]:disabled,
-input[type="number"]:disabled,
-input[type="date"]:disabled,
-input[type="time"]:disabled,
-input[type="search"]:disabled,
-textarea:disabled,
-select:disabled {
-  background-color: var(--color-background3);
-  border: 1px solid var(--color-background);
-  cursor: not-allowed;
-}
-
 input[type="text"]:not(:disabled):hover,
 input[type="password"]:not(:disabled):hover,
 input[type="email"]:not(:disabled):hover,
@@ -70,6 +47,34 @@ textarea:focus,
 select:focus {
   background-color: var(--color-background2);
   border: 1px solid var(--color-primary-hover);
+}
+
+input[type="text"]:disabled,
+input[type="password"]:disabled,
+input[type="email"]:disabled,
+input[type="number"]:disabled,
+input[type="date"]:disabled,
+input[type="time"]:disabled,
+input[type="search"]:disabled,
+textarea:disabled,
+select:disabled {
+  background-color: var(--color-background3);
+  border: 1px solid var(--color-background);
+  cursor: not-allowed;
+}
+
+input[type="text"]:disabled:hover,
+input[type="password"]:disabled:hover,
+input[type="email"]:disabled:hover,
+input[type="number"]:disabled:hover,
+input[type="date"]:disabled:hover,
+input[type="time"]:disabled:hover,
+input[type="search"]:disabled:hover,
+textarea:disabled:hover,
+select:disabled:hover {
+  background-color: var(--color-background3);
+  border: 1px solid var(--color-background);
+  cursor: not-allowed;
 }
 
 button,
@@ -104,6 +109,15 @@ input[type="button"].small {
   border-radius: 0.25rem;
 }
 
+button:not(:disabled):hover,
+.button:not(.disabled):hover,
+input[type="submit"]:not(:disabled):hover,
+input[type="reset"]:not(:disabled):hover,
+input[type="button"]:not(:disabled):hover {
+  color: var(--color-text);
+  background-color: var(--color-primary-hover);
+}
+
 button:disabled,
 .button.disabled,
 input[type="submit"]:disabled,
@@ -114,11 +128,12 @@ input[type="button"]:disabled {
   cursor: not-allowed;
 }
 
-button:not(:disabled):hover,
-.button:not(.disabled):hover,
-input[type="submit"]:not(:disabled):hover,
-input[type="reset"]:not(:disabled):hover,
-input[type="button"]:not(:disabled):hover {
+button:disabled:hover,
+.button.disabled:hover,
+input[type="submit"]:disabled:hover,
+input[type="reset"]:disabled:hover,
+input[type="button"]:disabled:hover {
+  background-color: var(--color-background);
   color: var(--color-text);
-  background-color: var(--color-primary-hover);
+  cursor: not-allowed;
 }

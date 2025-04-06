@@ -43,19 +43,24 @@
                         <div class="info">
                             <div>
                                 <p class="small">Identyfikator:</p>
-                                <p><?= $suspension["suspensionId"] ?> | @<?= $suspension["userUsername"] ?></p>
+                                <p>#<?= $suspension["suspensionId"] ?> | @<?= $suspension["userUsername"] ?></p>
+                            </div>
+                            <div class="divider"></div>
                             <div>
                                 <p class="small">Powód:</p>
                                 <p><?= $suspension["reason"] ?></p>
                             </div>
+                            <div class="divider"></div>
                             <div>
                                 <p class="small">Wygasa w dniu:</p>
                                 <p><?= $suspension["isPermanent"] ? "Nigdy (Permanentna)" : formatDate($suspension["expiresAt"], "datetime") ?></p>
                             </div>
+                            <div class="divider"></div>
                             <div>
                                 <p class="small">Nadana w dniu:</p>
                                 <p><?= formatDate($suspension["issuedAt"], "datetime") ?></p>
                             </div>
+                            <div class="divider"></div>
                             <div>
                                 <p class="small">Nadana przez:</p>
                                 <p>@<?= $suspension["issuerUsername"] ?></p>
