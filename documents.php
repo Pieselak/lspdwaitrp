@@ -2,7 +2,7 @@
     include_once ("php/functions.php");
     $list = include("php/list-documents.php");
     $getPage = $_GET["page"] ?? null;
-
+    
     checkMaintenance();
     $user = validateUser("documents.php");
 ?>
@@ -28,7 +28,7 @@
                             <?php endforeach; ?>
                         </div>
                     </div>
-
+                    
                     <?php $found = false; foreach ($list["sections"] as $section): 
                         if ($section["page"] == $getPage): $found = true;?>
                         <div class="item">
@@ -47,14 +47,14 @@
                     endforeach; ?>
 
                     <?php if (!$found): ?>
-                        <div class="item">
+                        <section>
                             <div class="header">
                                 <h3>Nieznaleziono dokumentu</h3>
                             </div>
                             <div class="content">
                                 <p>Brak dokumentów do wyświetlenia<?= $getPage != null ? " dla wyszukiwania: " . htmlspecialchars($getPage) : "" ?></p>
                             </div>
-                        </div>
+                        </section>
                     <?php endif; ?>
                 </div>
             </div>

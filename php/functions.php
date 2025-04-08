@@ -136,9 +136,17 @@ function setSetting($setting, $value) {
 
 // Maintenance functions
 
+function getMaintenance() {
+    return getSetting("maintenance_mode");
+}
+
+function getMaintenancePassword() {
+    return getSetting("maintenance_password");
+}
+
 function checkMaintenance() {
-    $status = getSetting("maintenance_mode");
-    $password = getSetting("maintenance_password");
+    $status = getMaintenance();
+    $password = getMaintenancePassword();
     $userPassword = $_SESSION["maintenancePassword"] ?? null;
 
     if ($status["success"] && $password["success"]) {
@@ -147,7 +155,6 @@ function checkMaintenance() {
         }
     }
 }
-
 
 function setMaintenanceMode($mode) {
     switch ($mode) {

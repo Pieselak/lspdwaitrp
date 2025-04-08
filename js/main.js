@@ -1,6 +1,27 @@
 document.addEventListener("DOMContentLoaded", function () {
   console.log("DOM loaded with JavaScript");
 
+  // Textarea functionality
+
+  function autoResizeTextarea(textarea) {
+    // Reset height to allow shrinking
+    textarea.style.height = "auto";
+    // Set the height to match the scroll height (content height)
+    textarea.style.height = textarea.scrollHeight + "px";
+  }
+
+  const textareas = document.querySelectorAll("textarea[data-autoresize]");
+
+  textareas.forEach(function (textarea) {
+    // Initial resize
+    autoResizeTextarea(textarea);
+
+    // Resize on input
+    textarea.addEventListener("input", function () {
+      autoResizeTextarea(textarea);
+    });
+  });
+
   // Theme functionality
   const themeButton = document.querySelector(".theme-button");
   const themeIcon = document.querySelector(".theme-button .theme-icon");
