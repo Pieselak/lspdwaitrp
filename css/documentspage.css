@@ -30,7 +30,7 @@
   margin-top: 0.25rem;
 }
 
-.page .document section {
+.page .document .item {
   display: flex;
   flex-direction: column;
 
@@ -39,7 +39,7 @@
   border-radius: 0.5rem;
 }
 
-.page .document section .header {
+.page .document .item .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -51,7 +51,7 @@
   border-radius: 0.5rem 0.5rem 0 0;
 }
 
-.page .document section .content {
+.page .document .item .content {
   display: flex;
   flex-direction: column;
 
@@ -59,7 +59,7 @@
   padding: 0.5rem;
 }
 
-.page .document section .content.row {
+.page .document .item .content.row {
   flex-direction: row;
   flex-wrap: wrap;
   gap: 0.5rem;
@@ -67,7 +67,7 @@
 
 /* OFFICERS */
 
-.page .document section .content .officer {
+.page .document .item .content .officer {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -80,12 +80,12 @@
   padding: 0.5rem;
 }
 
-.page .document section .content .officer h3,
-.page .document section .content .officer p {
+.page .document .item .content .officer h3,
+.page .document .item .content .officer p {
   width: 100%;
 }
 
-.page .document section .content .officer img {
+.page .document .item .content .officer img {
   width: 200px;
   height: 200px;
   object-fit: cover;
@@ -97,7 +97,7 @@
 
 /* DISCORD */
 
-.page .document section .content .discord {
+.page .document .item .content .discord {
   display: flex;
   justify-content: start;
   align-items: center;
@@ -109,7 +109,7 @@
   padding: 0.5rem;
 }
 
-.page .document section .content .discord img {
+.page .document .item .content .discord img {
   height: 100px;
   object-fit: cover;
   object-position: center;
@@ -117,7 +117,7 @@
   border-radius: 0.25rem;
 }
 
-.page .document section .content .discord div {
+.page .document .item .content .discord div {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;

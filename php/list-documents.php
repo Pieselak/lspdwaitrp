@@ -1,6 +1,6 @@
 <?php 
 return [
-    "title" => "Lista dokumentów",
+    "title" => "Dokumenty dla obywateli",
     "sections" => [
         [
             "page" => "skargi",

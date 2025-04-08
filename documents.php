@@ -31,7 +31,7 @@
 
                     <?php $found = false; foreach ($list["sections"] as $section): 
                         if ($section["page"] == $getPage): $found = true;?>
-                        <section>
+                        <div class="item">
                             <?php if (isset($section["title"])): ?>
                             <div class="header">
                                 <h3><?= $section["title"] ?></h3>
@@ -42,19 +42,19 @@
                                     <p><?= $item ?></p>
                                 <?php endforeach; ?>
                             </div>
-                        </section>
+                        </div>
                         <?php endif;
                     endforeach; ?>
 
                     <?php if (!$found): ?>
-                        <section>
+                        <div class="item">
                             <div class="header">
                                 <h3>Nieznaleziono dokumentu</h3>
                             </div>
                             <div class="content">
                                 <p>Brak dokumentów do wyświetlenia<?= $getPage != null ? " dla wyszukiwania: " . htmlspecialchars($getPage) : "" ?></p>
                             </div>
-                        </section>
+                        </div>
                     <?php endif; ?>
                 </div>
             </div>

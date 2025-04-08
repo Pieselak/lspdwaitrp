@@ -693,18 +693,19 @@ function validateUserBasic($redirect = null) {
         redirectTo("logout.php");
     }
 
-    unset($_SESSION["accessError"]);
-    unset($_SESSION["loginError"]);
-    unset($_SESSION["loginRedirect"]);
     $user = $_SESSION["user"];
     $requiredFields = ["id", "username", "displayname", "avatar", "email", "created_at", "last_login", "last_update", "role_id", "role_name"];
 
     foreach ($requiredFields as $field) {
         if (!isset($user[$field])) {
+            $_SESSION["loginError"] = "Niepoprawne dane użytkownika";
             redirectTo("logout.php");
         }
     }
 
+    unset($_SESSION["accessError"]);
+    unset($_SESSION["loginError"]);
+    unset($_SESSION["loginRedirect"]);
     return $_SESSION["user"];
 }
 
@@ -770,12 +771,14 @@ function checkUserPermission($category, $permission) {
 
 function validateUserAccess($permission, $redirectLogin = null, $redirectNoAccess = true) {
     $user = validateUser($redirectLogin);
+
     if (!checkUserPageAccess($permission, false)) {
         $_SESSION["accessError"] = "Nie posiadasz odpowiednich uprawnień do wyświetlenia tej strony!";
         if ($redirectNoAccess) {
             redirectTo("noaccess.php");
+        } else {
+            return ["access" => false, "user" => $user];
         }
-        return ["access" => false, "user" => $user];
     }
 
     return ["access" => true, "user" => $user];

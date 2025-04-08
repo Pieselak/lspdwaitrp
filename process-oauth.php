@@ -25,7 +25,7 @@ if (!$user["success"]) {
     die("Nie udało się uzyskać informacji o gildiach (". $guilds["message"] .")");
 }
 
-$login = loginUser($user["response"], $guilds["response"], $_SESSION["redirect"]);
+$login = loginUser($user["response"], $guilds["response"], $_SESSION["loginRedirect"] ?? null);
 if (!$login["success"]) {
     die("Nie udało się zalogować użytkownika (". $login["message"] .")");
 }

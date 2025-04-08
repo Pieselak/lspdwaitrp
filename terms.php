@@ -23,7 +23,7 @@
                     </div>
 
                     <?php $sectionCount = 1; $localCount = 1; foreach ($list["sections"] as $section): ?>
-                    <section>
+                    <div class="item">
                         <?php if (isset($section["title"])): ?>
                         <div class="header">
                             <h3><span> <?= $sectionCount . "." ?> </span> <?= $section["title"] ?></h3>
@@ -34,7 +34,7 @@
                             <p><span><?= $sectionCount . "." . $localCount . "." ?></span> <?= $item ?? null ?></p>
                             <?php $localCount ++; endforeach; ?>
                         </div>
-                    </section>
+                    </div>
                     <?php $sectionCount++; $localCount = 1; endforeach; ?>
                 </div>
             </div>

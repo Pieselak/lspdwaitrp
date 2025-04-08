@@ -18,7 +18,20 @@
             <div class="background"></div>
             <div class="page">
                 <?php if ($access["access"]): ?>
-
+                    <div class="staff">
+                        <div class="name">
+                            <h2>Panel administracyjny</h2>
+                        </div>
+                        <div class="item">
+                            <div class="header">
+                                <h3>Baner informacyjny</h3>
+                                <div class="content">
+                                    <form method="POST" action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>">
+                                        <textarea name="announcement" placeholder="Wpisz treść banera informacyjnego (zostaw pusty aby nie był widoczny)"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 <?php else: ?>
                     <?php include ("components/noaccess.php") ?>
                 <?php endif; ?>

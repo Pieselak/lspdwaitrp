@@ -24,7 +24,7 @@
                     </div>
 
                     <?php foreach ($list["sections"] as $section): ?>
-                    <section>
+                    <div class="item">
                         <?php if (isset($section["title"])): ?>
                             <div class="header">
                                 <h3><?= $section["title"] ?></h3>
@@ -39,7 +39,7 @@
                                 </div>
                             <?php endforeach; ?>
                         </div>
-                    </section>
+                    </div>
                     <?php endforeach; ?>
                 </div>
             </div>
