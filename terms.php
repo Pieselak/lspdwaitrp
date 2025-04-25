@@ -1,6 +1,7 @@
 <?php 
     include_once("server/functions.php");
     $list = include("server/config/list-terms.php");
+    global $conn;
 
     checkMaintenance();
 ?>

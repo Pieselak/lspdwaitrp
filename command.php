@@ -1,5 +1,6 @@
 <?php 
     include_once ("server/functions.php");
+    global $conn;
 
     checkMaintenance();
     $user = validateUser("command.php");

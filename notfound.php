@@ -1,5 +1,6 @@
 <?php 
     require_once("server/functions.php");
+    global $conn;
 ?>
 <!DOCTYPE html>
 <html lang="pl">

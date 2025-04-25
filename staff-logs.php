@@ -1,5 +1,6 @@
 <?php 
     include_once("server/functions.php");
+    global $conn;
 
     checkMaintenance();
     $access = validateUserAccess("staff-logs", "staff-logs.php", false);

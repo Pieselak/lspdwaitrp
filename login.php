@@ -1,5 +1,6 @@
 <?php 
     include_once("server/functions.php");
+    global $conn, $cfg_discord;
     $redirect = $_SESSION["loginRedirect"] ?? null;
     $error = $_SESSION["loginError"] ?? null;
     

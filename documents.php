@@ -1,6 +1,7 @@
 <?php 
     include_once("server/functions.php");
     $list = include("server/config/list-documents.php");
+    global $conn;
     $getPage = $_GET["page"] ?? null;
     
     checkMaintenance();

@@ -1,5 +1,6 @@
 <?php 
     require_once("server/functions.php");
+    global $conn;
 
     if (getSetting("maintenance_mode")["message"] == "0") {
         redirectTo("index.php");
