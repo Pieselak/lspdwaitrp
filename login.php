@@ -21,7 +21,7 @@
             <div class="page">
                 <div class="login">
                     <div class="header">
-                        <h2>Zaloguj się<h2>
+                        <h2>Zaloguj się</h2>
                         <h4>Portal internetowy LSPD</h4>
                     </div>
 
