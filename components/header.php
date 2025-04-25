@@ -1,5 +1,5 @@
 <?php 
-include_once ("php/functions.php");
+include_once("server/functions.php");
 if (!isset($user)) {
     $user = $_SESSION["user"] ?? null;
 }
@@ -27,7 +27,7 @@ if (!isset($user)) {
                 <div class="dropdown-content">
                     <a href="command.php"><i class='bx bx-group'></i>Zarząd departamentu</a>
                     <a href="discord.php"><i class='bx bx-link'></i>Serwery discord</a>
-                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-separator"></div>
                     <a href="terms.php"><i class='bx bx-file-find'></i>Warunki korzystania z usługi</a>
                 </div>
             </div>
@@ -38,11 +38,11 @@ if (!isset($user)) {
                 </button>
                 <div class="dropdown-content">
                     <a href="documents.php?page=skargi"><i class='bx bx-help-circle'></i>Skargi i odwołania</a>
-                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-separator"></div>
                     <a href="documents.php?page=przebieg-akademii"><i class='bx bx-book-alt'></i>Przebieg akademiii</a>
                     <a href="documents.php?page=regulamin-akademii"><i class='bx bx-book'></i>Regulamin akademii</a>
                     <a href="documents.php?page=kompendium-wiedzy"><i class='bx bx-book-bookmark'></i>Kompendium wiedzy</a>
-                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-separator"></div>
                     <a href="documents.php?page=pozwolenie-na-bron"><i class='bx bx-id-card'></i>Pozwolenie na broń</a>
                 </div>
             </div>
@@ -92,7 +92,7 @@ if (!isset($user)) {
                         <a href="settings.php"><i class='bx bx-cog'></i> Ustawienia</a>
                     <?php endif; ?>
                     <button class="theme-button"><i class='bx bx-sun theme-icon'></i> <span class="theme-text">Zmień motyw</span></button>
-                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-separator"></div>
                     <?php if(!$user): ?>
                         <a href="login.php"><i class='bx bx-log-in'></i> Zaloguj się</a>
                     <?php endif; ?>

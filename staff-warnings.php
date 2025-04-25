@@ -1,12 +1,12 @@
 <?php 
-    include_once ("php/functions.php");
+    include_once("server/functions.php");
 
     checkMaintenance();
     $access = validateUserAccess("staff-warnings", "staff-warnings.php", false);
     $user = $access["user"];
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="pl">
     <head>
         <?php include ("components/head.php") ?>
     </head>

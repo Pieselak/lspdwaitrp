@@ -65,29 +65,43 @@
   gap: 0.5rem;
 }
 
-/* OFFICERS */
 
-.page .document .item .content .officer {
+/* OFFICERS & DISCORD */
+
+.page .document .item .content.tech {
+  display: grid;
+  gap: 1rem;
+  align-items: stretch;
+  grid-auto-rows: 1fr;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+.page .document .item .content .tech {
   display: flex;
-  justify-content: center;
-  align-items: center;
   flex-direction: column;
-  flex-grow: 1;
+  justify-content: start;
+  align-items: center;
+  gap: 0.5rem;
 
-  max-width: 250px;
   background-color: var(--color-background3);
   border-radius: 0.5rem;
   padding: 0.5rem;
 }
 
-.page .document .item .content .officer h3,
-.page .document .item .content .officer p {
-  width: 100%;
+.page .document .item .content a.tech {
+  color: var(--color-text);
+  text-decoration: none;
 }
 
-.page .document .item .content .officer img {
-  width: 200px;
-  height: 200px;
+.page .document .item .content a.tech:hover {
+  cursor: pointer;
+  background-color: var(--color-primary);
+  transition: background-color 0.3s ease-in-out;
+}
+
+.page .document .item .content .tech img {
+  width: 100%;
+  aspect-ratio: 1/1;
   object-fit: cover;
   object-position: top;
 
@@ -95,34 +109,16 @@
   border-radius: 0.25rem;
 }
 
-/* DISCORD */
+.page .document .item .content .tech div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.5rem;
 
-.page .document .item .content .discord {
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  flex-grow: 1;
-  gap: 0.5rem;
-
-  background-color: var(--color-background3);
-  border-radius: 0.5rem;
-  padding: 0.5rem;
+    width: 100%;
 }
 
-.page .document .item .content .discord img {
-  height: 100px;
-  object-fit: cover;
-  object-position: center;
-
-  border-radius: 0.25rem;
+.page .document .item .content .tech h4,
+.page .document .item .content .tech p {
+  text-align: center;
 }
-
-.page .document .item .content .discord div {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-
-  width: 100%;
-}
-
-/* DOCUMENTS */

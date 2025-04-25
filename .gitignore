@@ -1,5 +1,5 @@
 # Configuration files with sensitive information
-/php/config.php
+/server/config/config.php
 .env
 .sql
 

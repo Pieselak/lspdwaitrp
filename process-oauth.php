@@ -1,11 +1,11 @@
 <?php   
-include_once("php/functions.php");
+include_once("server/functions.php");
 
 if (!isset($_GET["code"])) {
     die ("No code provided");
 }
 
-$discord_code = $_GET["code"] ?? null;
+$discord_code = $_GET["code"];
 
 $auth_token = getDiscordAuthToken($discord_code);
 
@@ -16,12 +16,12 @@ if (!$auth_token["success"]) {
 $user = getDiscordUser($auth_token["token"]);
 
 if (!$user["success"]) {
-    die("Nie udało się uzyskać informacji o użytkowniku (". $userinfo["message"] .")");
+    die("Nie udało się uzyskać informacji o użytkowniku (". $user["message"] .")");
 }
 
 $guilds = getDiscordGuilds($auth_token["token"]);
 
-if (!$user["success"]) {
+if (!$guilds["success"]) {
     die("Nie udało się uzyskać informacji o gildiach (". $guilds["message"] .")");
 }
 

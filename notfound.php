@@ -1,8 +1,8 @@
 <?php 
-    require_once ("php/functions.php");
+    require_once("server/functions.php");
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="pl">
     <head>
         <?php include ("components/head.php") ?>
     </head>

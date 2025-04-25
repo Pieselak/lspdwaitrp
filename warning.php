@@ -1,12 +1,12 @@
 <?php 
-    include_once ("php/functions.php");
+    include_once("server/functions.php");
 
     checkMaintenance();
     $user = validateUserBasic("index.php");
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (isset($_POST["accept"])) {
-            $warningId = $_POST["warningId"];
+            $warningId = $_POST["warning_id"];
             $accept = acceptWarning($warningId);
             if ($accept["success"]) {
                 redirectTo("index.php");
@@ -17,25 +17,23 @@
     }
 
     $warnings = getUserWarnings($user["id"]);
-    $warning;
 
     if ($warnings["success"]) {
         foreach ($warnings["warnings"] as $w) {
-            if ($w["statusId"] == 1 && $w["isAccepted"] == 0) {
+            if ($w["status_id"] == 1 && $w["is_accepted"] == 0) {
                 $warning = $w;
                 break;
             }
         }
-    } else {
-        $warning = false;
     }
+    $warning = $warning ?? false;
 
     if (!$warning) {
         redirectTo("index.php");
     }
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="pl">
     <head>
         <?php include ("components/head.php") ?>
     </head>
@@ -60,25 +58,28 @@
                         <div class="info">
                             <div>
                                 <p class="small">Identyfikator:</p>
-                                <p>#<?= $warning["warningId"] ?> | @<?= $warning["userUsername"] ?></p>
+                                <p>#<?= $warning["warning_id"] ?> | @<?= $warning["user_username"] ?></p>
                             </div>
+                            <div class="separator"></div>
                             <div>
                                 <p class="small">Powód:</p>
                                 <p><?= $warning["reason"] ?></p>
                             </div>
+                            <div class="separator"></div>
                             <div>
-                                <p class="small">Nadana w dniu:</p>
-                                <p><?= formatDate($warning["issuedAt"], "datetime") ?></p>
+                                <p class="small">Nadane w dniu:</p>
+                                <p><?= $warning["issued_at"] ?></p>
                             </div>
+                            <div class="separator"></div>
                             <div>
-                                <p class="small">Nadana przez:</p>
-                                <p><?= $warning["issuerUsername"] ?></p>
+                                <p class="small">Nadane przez:</p>
+                                <p>@<?= $warning["issuer_username"] ?></p>
                             </div>
                         </div>
                     </div>
                     <div class="buttons">
                         <form method="POST" action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>">
-                            <input type="hidden" name="warningId" value="<?= $warning["warningId"] ?>">
+                            <input type="hidden" name="warning_id" value="<?= $warning["warning_id"] ?>">
                             <button type="submit" name="accept" class="button">Akceptuj ostrzeżenie</button>
                         </form>
                         <a href="logout.php" class="button">Wyloguj się</a>

@@ -1,5 +1,5 @@
 <?php 
-    require_once ("php/functions.php");
+    require_once("server/functions.php");
 
     if (getSetting("maintenance_mode")["message"] == "0") {
         redirectTo("index.php");
@@ -13,11 +13,13 @@
     }
 
     if (isset($_POST["password"])) {
+        $password = validate($_POST["password"], "string-password");
+        $password = $password["success"] ? $password["message"] : null;
         $maintenancePassword = getSetting("maintenance_password");
         if (!$maintenancePassword["success"]) {
             $error = "Błąd odczytu hasła dostępu";
-        } elseif ($_POST["password"] == $maintenancePassword["message"]) {
-            $_SESSION["maintenancePassword"] = $_POST["password"];
+        } elseif ($maintenancePassword["message"] == $password) {
+            $_SESSION["maintenancePassword"] = $password;
             redirectTo("index.php");
         } else {
             $error = "Nieprawidłowe hasło dostępu";
@@ -41,14 +43,14 @@
     }
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="pl">
     <head>
         <?php include ("components/head.php") ?>
     </head>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             let timeout = <?= isset($timeout) ? $timeout : "0" ?>;
-            const error = <?= isset($error) ? json_encode($error) : "null" ?>;
+            let error = <?= isset($error) ? json_encode($error) : "null" ?>;
             const info = document.getElementById("status");
             const submit = document.getElementById("submit");
 

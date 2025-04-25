@@ -1,4 +1,4 @@
 <?php 
-    include_once ("php/functions.php");
+    include_once("server/functions.php");
     logoutUser();
 ?>

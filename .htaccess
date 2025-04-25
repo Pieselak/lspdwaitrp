@@ -18,7 +18,7 @@ RewriteCond %{REQUEST_URI} /\.|^\.
 RewriteRule .* - [F]
 
 # Prevent direct access to sensitive files and directories
-RewriteRule ^php/.*$ - [F,L]
+RewriteRule ^server/.*$ - [F,L]
 RewriteRule ^components/.*$ - [F,L]
 RewriteRule ^\.git/.*$ - [F,L]
 
@@ -79,7 +79,7 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)/$ $1 [L,R=301]
 
 # Simple URL rewrites for cleaner URLs (optional)
-# Example: /profile/username instead of profile.php?user=username
+# Example: /profile/username instead of profile.server?user=username
 # RewriteCond %{REQUEST_FILENAME} !-f
 # RewriteCond %{REQUEST_FILENAME} !-d
-# RewriteRule ^profile/([^/]+)/?$ profile.php?user=$1 [L,QSA]
+# RewriteRule ^profile/([^/]+)/?$ profile.server?user=$1 [L,QSA]

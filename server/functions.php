@@ -1,16 +1,20 @@
 <?php 
-include_once ("config.php");
+include_once("config/config.php");
 include_once ("database.php");
 
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// Basic functions
+// ###################
+// # Basic functions #
+// ###################
 
-function redirectTo($url) {
+function redirectTo($url, $exit = true): void {
     header("Location: $url");
-    exit();
+    if ($exit) {
+        exit();
+    }
 }
 
 function formatDate($date, $format = "datetime") {
@@ -21,38 +25,24 @@ function formatDate($date, $format = "datetime") {
     return date($cfg_format[$format], strtotime($date));
 }
 
-function getClientIP() {
-    if (isset($_SERVER["HTTP_CLIENT_IP"])) {
-        return $_SERVER["HTTP_CLIENT_IP"];
-    } elseif (isset($_SERVER["HTTP_X_FORWARDED_FOR"])) {
-        return $_SERVER["HTTP_X_FORWARDED_FOR"];
-    } elseif (isset($_SERVER["HTTP_X_FORWARDED"])) {
-        return $_SERVER["HTTP_X_FORWARDED"];
-    } elseif (isset($_SERVER["HTTP_FORWARDED_FOR"])) {
-        return $_SERVER["HTTP_FORWARDED_FOR"];
-    } elseif (isset($_SERVER["HTTP_FORWARDED"])) {
-        return $_SERVER["HTTP_FORWARDED"];
-    } elseif (isset($_SERVER["REMOTE_ADDR"])) {
-        return $_SERVER["REMOTE_ADDR"];
-    } else {
-        return "Nieznane";
-    }
-}
-
-// Validation functions
-
-function validate($input, $inputType = null) {
+function validate($input, $inputType = "string"): array {
     global $cfg_format;
     $input = trim($input);
     $input = stripslashes($input);
     switch ($inputType) {
-        case "string": 
+        case "string":
             $input = filter_var($input, FILTER_VALIDATE_REGEXP, ["options" => ["regexp" => "/^[a-zA-Z0-9_\- ]+$/"]]);
             if (!$input) {
                 return ["success" => false, "message" => "Niepoprawny format danych (A-Z, a-z, 0-9, _, -, spacja)"];
             }
             break;
-        case "format-tags": 
+        case "string-password":
+            $input = filter_var($input, FILTER_VALIDATE_REGEXP, ["options" => ["regexp" => "/^[a-zA-Z0-9_\-!@#$%^&*()]+$/"]]);
+            if (!$input) {
+                return ["success" => false, "message" => "Niepoprawny format hasła (A-Z, a-z, 0-9, _, -, !@#$%^&*())"];
+            }
+            break;
+        case "string-tags":
             $input = strip_tags($input, $cfg_format["allowed_tags"]);
             break;
         case "int":
@@ -96,9 +86,29 @@ function validate($input, $inputType = null) {
     return ["success" => true, "message" => $input];
 }
 
-// Settings functions
+function getClientIP() {
+    if (isset($_SERVER["HTTP_CLIENT_IP"])) {
+        return $_SERVER["HTTP_CLIENT_IP"];
+    } elseif (isset($_SERVER["HTTP_X_FORWARDED_FOR"])) {
+        return $_SERVER["HTTP_X_FORWARDED_FOR"];
+    } elseif (isset($_SERVER["HTTP_X_FORWARDED"])) {
+        return $_SERVER["HTTP_X_FORWARDED"];
+    } elseif (isset($_SERVER["HTTP_FORWARDED_FOR"])) {
+        return $_SERVER["HTTP_FORWARDED_FOR"];
+    } elseif (isset($_SERVER["HTTP_FORWARDED"])) {
+        return $_SERVER["HTTP_FORWARDED"];
+    } elseif (isset($_SERVER["REMOTE_ADDR"])) {
+        return $_SERVER["REMOTE_ADDR"];
+    } else {
+        return null;
+    }
+}
 
-function getSetting($setting) {
+// ######################
+// # Settings functions #
+// ######################
+
+function getSetting($setting): array {
     global $conn;
 
     $stmt = $conn->prepare("SELECT value FROM settings WHERE setting = ?");
@@ -117,9 +127,9 @@ function getSetting($setting) {
 
     $result = $result->fetch_assoc();
     return ["success" => true, "message" => $result["value"]];
-};
+}
 
-function setSetting($setting, $value) {
+function setSetting($setting, $value): array {
     global $conn;
 
     $stmt = $conn->prepare("UPDATE settings SET value = ? WHERE setting = ?");
@@ -132,20 +142,21 @@ function setSetting($setting, $value) {
     $stmt->close();
 
     return ["success" => true, "message" => "Ustawienia zostały zaktualizowane"];
-};
+}
+// #########################
+// # Maintenance functions #
+// #########################
 
-// Maintenance functions
-
-function getMaintenance() {
+function getMaintenanceMode(): array {
     return getSetting("maintenance_mode");
 }
 
-function getMaintenancePassword() {
+function getMaintenancePassword(): array {
     return getSetting("maintenance_password");
 }
 
-function checkMaintenance() {
-    $status = getMaintenance();
+function checkMaintenance(): void {
+    $status = getMaintenanceMode();
     $password = getMaintenancePassword();
     $userPassword = $_SESSION["maintenancePassword"] ?? null;
 
@@ -156,7 +167,7 @@ function checkMaintenance() {
     }
 }
 
-function setMaintenanceMode($mode) {
+function setMaintenanceMode($mode): array {
     switch ($mode) {
         case "1":
             $setting = setSetting("maintenance_mode", "1");
@@ -171,23 +182,43 @@ function setMaintenanceMode($mode) {
     return $setting;
 }
 
-function setMaintenancePassword($password) {
+function setMaintenancePassword($password): array {
     return setSetting("maintenance_password", $password);
 }
 
 // Announcement functions
-
-function getAnnouncement() {
-    return getSetting('announcement');
+function getAnnouncementMode(): array {
+    return getSetting('announcement_mode');
 }
 
-function setAnnouncement($content) {
-    return setSetting('announcement', $content);
+function getAnnouncementContent(): array {
+    return getSetting('announcement_content');
 }
 
-// Discord API functions
+function setAnnouncementMode($mode): array {
+    switch ($mode) {
+        case "1":
+            $setting = setSetting("announcement_mode", "1");
+            break;
+        case "0":
+            $setting = setSetting("announcement_mode", "0");
+            break;
+        default:
+            return ["success" => false, "message" => "Niepoprawny tryb (0 - wyłączony, 1 - włączony)"];
+    }
 
-function getDiscordAuthToken($code) {
+    return $setting;
+}
+
+function setAnnouncementContent($content): array {
+    return setSetting('announcement_content', $content);
+}
+
+// #########################
+// # Discord API functions #
+// #########################
+
+function getDiscordAuthToken($code): array {
     global $cfg_discord, $cfg_oauth, $cfg_curl;
 
     if (empty($code)) {
@@ -232,7 +263,7 @@ function getDiscordAuthToken($code) {
     return ["success" => true, "message" => "Uzyskano token autoryzacji", "token" => $response["access_token"]];
 }
 
-function getDiscordUser($auth_token) {
+function getDiscordUser($auth_token): array {
     global $cfg_discord, $cfg_curl;
 
     $curl = curl_init();
@@ -255,7 +286,7 @@ function getDiscordUser($auth_token) {
     return ["success" => true, "message" => "Pobrano informacje o użytkowniku", "response" => json_decode($response, true)];
 }
 
-function getDiscordGuilds($auth_token) {
+function getDiscordGuilds($auth_token): array {
     global $cfg_discord, $cfg_curl;
 
     $curl = curl_init();
@@ -278,7 +309,7 @@ function getDiscordGuilds($auth_token) {
     return ["success" => true, "message" => "Pobrano informacje o gildiach", "response" => json_decode($response, true)];
 }
 
-function createDiscordUser($id) {
+function createDiscordUser($id):array {
     global $cfg_discord, $cfg_curl;
 
     if (intval($id) == 0) {
@@ -314,12 +345,14 @@ function createDiscordUser($id) {
     return createUser($params);
 }
 
-// User functions
+// ##################
+// # User functions #
+// ##################
 
-function getUser($id) {
+function getUser($id): array {
     global $conn, $cfg_discord;
 
-    $stmt = $conn->prepare("SELECT * FROM users u LEFT JOIN roles r ON u.role_id = r.role_id WHERE id = ?");
+    $stmt = $conn->prepare("SELECT * FROM users u LEFT JOIN users_roles r ON u.role_id = r.role_id WHERE id = ?");
     $stmt->bind_param("s", $id);
     $stmt->execute();
     if ($stmt->errno) {
@@ -340,9 +373,9 @@ function getUser($id) {
             'displayname' => $result["displayname"] ?? "Nieznane",
             'avatar' => $cfg_discord["avatar"] . $result["id"] . "/" . $result["avatar"] ?? $cfg_discord["default_avatar"],
             'email' => $result["email"] ?? "Nieznane",
-            'created_at' => $result["created_at"] ?? "0000-00-00 00:00:00",
-            'last_update' => $result["last_update"] ?? "0000-00-00 00:00:00",
-            'last_login' => getLastLogin($id)["login"] ?? "0000-00-00 00:00:00",
+            'created_at' => formatDate($result["created_at"]) ?? "Nieznane",
+            'last_update' => formatDate($result["last_update"]) ?? "Nieznane",
+            'last_login' => formatDate(getUserLastLoginDate($id)["login"]) ?? "Niezanne",
             'role_id' => $result["role_id"] ?? 0,
             'role_name' => $result["role_name"] ?? "Brak przypisanej roli",
         ];
@@ -351,12 +384,12 @@ function getUser($id) {
     }
 }
 
-function getAllUsers($search = null) {
+function getAllUsers($search = null): array {
     global $conn;
 
     if ($search) {
         $searchTerm = "%" . $search . "%";
-        $stmt = $conn->prepare("SELECT u.id FROM users u LEFT JOIN roles r ON u.role_id = r.role_id WHERE u.id LIKE ? or u.username LIKE ? or u.displayname LIKE ? or r.role_name LIKE ?");
+        $stmt = $conn->prepare("SELECT u.id FROM users u LEFT JOIN users_roles r ON u.role_id = r.role_id WHERE u.id LIKE ? or u.username LIKE ? or u.displayname LIKE ? or r.role_name LIKE ?");
         $stmt->bind_param("ssss", $search, $searchTerm, $searchTerm, $search);
     } else {
         $stmt = $conn->prepare("SELECT id FROM users");
@@ -381,14 +414,13 @@ function getAllUsers($search = null) {
     return ["success" => true, "message" => "Pobrano wszystkich użytkowników", "users" => $users];
 }
 
-function updateUser($id, $params) {
+function updateUser($id, $params): array {
     global $conn;
 
     $user = getUser($id);
     if (!$user["success"]) {
         return ["success" => false, "message" => $user["message"]];
-    }
-    elseif ($user["success"] && !$user["user"]) {
+    } elseif (!$user["user"]) {
         return ["success" => false, "message" => "Użytkownik o ID $id nie istnieje"];
     }
 
@@ -417,7 +449,7 @@ function updateUser($id, $params) {
     return ["success" => true, "message" => "Użytkownik o ID $id został zaktualizowany"];
 }
 
-function createUser($params) {
+function createUser($params): array {
     global $conn;
 
     $params = [
@@ -449,13 +481,13 @@ function createUser($params) {
     return ["success" => true, "message" => "Użytkownik o ID " . $params["id"] . " został dodany"];
 }
 
-function deleteUser($id) {
+function deleteUser($id): array {
     global $conn;
 
     $getUser = getUser($id);
     if (!$getUser["success"]) {
         return ["success" => false, "message" => $getUser["message"]];
-    } elseif ($getUser["success"] && !$getUser["user"]) {
+    } elseif (!$getUser["user"]) {
         return ["success" => false, "message" => "Użytkownik o ID $id nie istnieje"];
     }
 
@@ -467,54 +499,142 @@ function deleteUser($id) {
     return ["success" => true, "message" => "Użytkownik o ID $id został usunięty"];
 }
 
-function refreshUser() {
-    global $cfg_discord;
-
+function refreshUser(): array {
     if (!isUserLogged()) {
         return ["success" => false, "message" => "Użytkownik nie jest zalogowany"];
     }
 
-    $user = $_SESSION["user"];
-    $getUser = getUser($user["id"]);
+    $getUser = getUser($_SESSION["user"]["id"]);
 
     if (!$getUser["success"]) {
         return ["success" => false, "message" => $getUser["message"]];
-    } elseif ($getUser["success"] && !$getUser["user"]) {
+    } elseif (!$getUser["user"]) {
         return ["success" => false, "message" => "Użytkownik o ID " . $getUser["id"] . " nie istnieje"];
     }
 
-    $getUser = $getUser["user"];
-    $user = [
-        'id' => $getUser["id"] ?? null,
-        'username' => $getUser["username"] ?? "Nieznane",
-        'displayname' => $getUser["displayname"] ?? "Nieznane",
-        'avatar' => $getUser["avatar"] ?? $cfg_discord["default_avatar"],
-        'email' => $getUser["email"] ?? "Nieznane",
-        'created_at' => $getUser["created_at"] ?? "0000-00-00 00:00:00",
-        'last_login' => $getUser["last_login"] ?? "0000-00-00 00:00:00",
-        'last_update' => $getUser["last_update"] ?? "0000-00-00 00:00:00",
-        'role_id' => $getUser["role_id"] ?? 0,
-        'role_name' => $getUser["role_name"] ?? "Brak roli",
-    ];
-    $_SESSION["user"] = $user;
+    $_SESSION["user"] = $getUser["user"];
 
     return ["success" => true, "message" => "Zaktualizowano dane użytkownika"];
-};
+}
 
-// Login functions
+// ##################
+// # Logs functions #
+// ##################
 
-function checkUserLogin() {
+function getLogs(): array {
+    global $conn;
+
+    $stmt = $conn->prepare("SELECT l.log_id, l.action_id, la.action_name, la.action_icon, la.action_color, la.action_message, l.user_id, u.username, u.displayname, l.log_details, l.log_date FROM logs l LEFT JOIN logs_actions la ON l.action_id = la.action_id LEFT JOIN users u ON l.user_id = u.id ORDER BY l.log_id DESC");
+    $stmt->execute();
+    if ($stmt->errno) {
+        error_log("MySQL error: " . $stmt->error);
+        return ["success" => false, "message" => "Wystąpił błąd podczas pobierania zapisów z dziennika", "logs" => null];
+    }
+
+    $result = $stmt->get_result();
+    $stmt->close();
+
+    $logs = array();
+
+    while ($row = $result->fetch_assoc()) {
+        $log = [
+            'log_id' => $row["log_id"] ?? "Nieznane",
+            'action_id' => $row["action_id"] ?? "Nieznane",
+            'action_name' => $row["action_name"] ?? "Nieznane",
+            'action_icon' => $row["action_icon"] ?? "bx bx-error",
+            'action_color' => $row["action_color"] ?? "gray",
+            'action_message' => $row["action_message"] ?? "Nieznane",
+            'user_id' => $row["user_id"] ?? "Nieznane",
+            'user_username' => $row["username"] ?? "Nieznane",
+            'user_displayname' => $row["displayname"] ?? "Nieznane",
+            'log_details' => $row["log_details"] ?? "Brak szczegółów",
+            'log_date' => formatDate($row["log_date"] ?? "0000-00-00 00:00:00"),
+            'log_date_raw' => $row["log_date"] ?? "0000-00 00:00:00",
+        ];
+        $logs[] = $log;
+    }
+
+    return ["success" => true, "message" => "Pobrano wszystkie zapisy z dziennika", "logs" => $logs];
+}
+
+function getLogsCategories(): array {
+    global $conn;
+
+    $stmt = $conn->prepare("SELECT action_id, action_name FROM logs_actions");
+    $stmt->execute();
+    if ($stmt->errno) {
+        error_log("MySQL error: " . $stmt->error);
+        return ["success" => false, "message" => "Wystąpił błąd podczas pobierania kategorii z dziennika", "categories" => null];
+    }
+
+    $result = $stmt->get_result();
+    $stmt->close();
+
+    $categories = array();
+
+    while ($row = $result->fetch_assoc()) {
+        $categories[] = [
+            'action_id' => $row["action_id"] ?? 0,
+            'action_name' => $row["action_name"] ?? "Nieznane",
+        ];
+    }
+
+    return ["success" => true, "message" => "Pobrano wszystkie kategorie z dziennika", "categories" => $categories];
+}
+
+function addLog($params): array {
+    global $conn;
+
+    $params = [
+        'action' => $params["action"] ?? null,
+        'user' => $params["user"] ?? null,
+        'details' => $params["details"] ?? null,
+    ];
+
+    $stmt = $conn->prepare("INSERT INTO logs (user_id, action_id, log_details, log_date) VALUES (?, ?, ?, NOW())");
+    $stmt->bind_param("sss", $params["user"], $params["action"], $params["details"]);
+    $stmt->execute();
+    if ($stmt->errno) {
+        error_log("MySQL error: " . $stmt->error);
+        return ["success" => false, "message" => "Wystąpił błąd podczas dodawania zapisu do dziennika"];
+    }
+    $stmt->close();
+
+    return ["success" => true, "message" => "Zapis został dodany do dziennika"];
+}
+function deleteLog($id): array {
+    global $conn;
+
+    $stmt = $conn->prepare("DELETE FROM logs WHERE log_id = ?");
+    $stmt->bind_param("s", $id);
+    $stmt->execute();
+    if ($stmt->errno) {
+        error_log("MySQL error: " . $stmt->error);
+        return ["success" => false, "message" => "Wystąpił błąd podczas usuwania zapisu z dziennika"];
+    }
+    $stmt->close();
+
+    return ["success" => true, "message" => "Zapis o ID $id został usunięty"];
+}
+
+
+// ###################
+// # Login functions #
+// ###################
+
+function checkUserLogin(): array {
     global $conn;
 
     if (!isset($_SESSION["user"])) {
         return ["success" => false, "message" => "Nie znaleziono sesji użytkownika"];
     }
 
+    $user = $_SESSION["user"];
     $sessionId = session_id();
     $clientIp = getClientIP();
 
-    $stmt = $conn->prepare("SELECT * FROM users_logins WHERE login_session = ? AND login_ip = ?");
-    $stmt->bind_param("ss", $sessionId, $clientIp);
+    $stmt = $conn->prepare("SELECT login_session_active FROM users_logins WHERE user_id = ? AND login_session = ? AND login_ip = ?");
+    $stmt->bind_param("sss", $user["id"], $sessionId, $clientIp);
     $stmt->execute();
     if ($stmt->errno) {
         error_log("MySQL error: " . $stmt->error);
@@ -528,14 +648,14 @@ function checkUserLogin() {
     }
 
     $row = $result->fetch_assoc();
-    if ($row["login_session_active"] == false) {
+    if (!$row["login_session_active"]) {
         return ["success" => false, "message" => "Sesja użytkownika została dezaktywowana"];
     }
 
     return ["success" => true, "message" => "Znaleziono sesję użytkownika"];
 }
 
-function addLogin($id) {
+function addUserLogin($id): array {
     global $conn;
 
     $sessionId = session_id();
@@ -553,7 +673,7 @@ function addLogin($id) {
     return ["success" => true, "message" => "Dodano logowanie użytkownika"];
 }
 
-function getLastLogin($id) {
+function getUserLastLoginDate($id): array {
     global $conn;
 
     $stmt = $conn->prepare("SELECT login_date FROM users_logins WHERE user_id = ? ORDER BY login_date DESC LIMIT 1");
@@ -571,10 +691,10 @@ function getLastLogin($id) {
     }
 
     $row = $result->fetch_assoc();
-    return ["success" => true, "message" => "Pobrano ostatnie logowanie użytkownika", "login" => $row["login_date"]];
+    return ["success" => true, "message" => "Pobrano ostatnie logowanie użytkownika", "login" => $row["login_date"] ?? null];
 }
 
-function getLogins($userid) {
+function getUserLogins($userid): array {
     global $conn;
 
     $stmt = $conn->prepare("SELECT * FROM users_logins WHERE user_id = ? ORDER BY login_date DESC");
@@ -591,30 +711,51 @@ function getLogins($userid) {
 
     while ($row = $result->fetch_assoc()) {
         $logins[] = [
-            'id' => $row["id"],
-            'user_id' => $row["user_id"],
-            'login_session' => $row["login_session"],
-            'login_session_active' => $row["login_session_active"],
-            'login_ip' => $row["login_ip"],
-            'login_date' => $row["login_date"],
+            'login_id' => $row["login_id"] ?? null,
+            'user_id' => $row["user_id"] ?? null,
+            'login_session' => $row["login_session"] ?? "Nieznane",
+            'login_session_active' => $row["login_session_active"] ?? 0,
+            'login_ip' => $row["login_ip"] ?? "Nieznane",
+            'login_date' => formatDate($row["login_date"] ?? "0000-00-00 00:00:00"),
+            'login_date_raw' => $row["login_date"] ?? "0000-00-00 00:00:00",
         ];
     }
 
     return ["success" => true, "message" => "Pobrano logowania użytkownika", "logins" => $logins];
 }
 
+function deactivateUserLogin($id, $userid): array {
+    global $conn;
+
+    $stmt = $conn->prepare("UPDATE users_logins SET login_session_active = 0 WHERE user_id = ? AND login_session = ? ");
+    $stmt->bind_param("ss", $userid, $id);
+    $stmt->execute();
+    if ($stmt->errno) {
+        error_log("MySQL error: " . $stmt->error);
+        return ["success" => false, "message" => "Wystąpił błąd podczas dezaktywacji sesji użytkownika"];
+    }
+    $stmt->close();
+
+    return ["success" => true, "message" => "Dezaktywowano sesje użytkownika"];
+}
+
 function logoutUser() 
 {
-    unset($_SESSION["user"]);
-    unset($_SESSION["guilds"]);
+    if (isUserLogged()) {
+        unset($_SESSION["user"]);
+        unset($_SESSION["guilds"]);
+        deactivateUserLogin(session_id(), $_SESSION["user"]["id"]);
+
+        unset($_SESSION["maintenancePassword"]);
+        unset($_SESSION["maintenanceAttemps"]);
+        unset($_SESSION["maintenanceCooldown"]);
+    }
 
     session_regenerate_id();
     redirectTo("login.php");
 }
 
-function loginUser($user, $guilds, $redirect = null) {
-    global $cfg_discord;
-
+function loginUser($user, $guilds, $redirect = null): array {
     if ($redirect == "" || $redirect == null) {
         $redirect = "index.php";
     }
@@ -622,7 +763,7 @@ function loginUser($user, $guilds, $redirect = null) {
     $getUser = getUser($user["id"]);
     if (!$getUser["success"]) {
         return ["success" => false, "message" => $getUser["message"]];
-    } elseif ($getUser["success"] && !$getUser["user"]) {
+    } elseif (!$getUser["user"]) {
         createUser([
             'id' => $user["id"],
             'username' => $user["username"],
@@ -630,7 +771,7 @@ function loginUser($user, $guilds, $redirect = null) {
             'avatar' => $user["avatar"],
             'email' => $user["email"],
         ]);
-    } elseif ($getUser["success"] && $getUser["user"]) {
+    } else {
         updateUser($user["id"], [
             'username' => $user["username"],
             'displayname' => $user["global_name"],
@@ -642,37 +783,23 @@ function loginUser($user, $guilds, $redirect = null) {
     $getUser = getUser($user["id"]);
     if (!$getUser["success"]) {
         return ["success" => false, "message" => $getUser["message"]];
-    } elseif ($getUser["success"] && !$getUser["user"]) {
+    } elseif (!$getUser["user"]) {
         return ["success" => false, "message" => "Użytkownik o ID " . $getUser["id"] . " nie istnieje"];
     }
-    $getUser = $getUser["user"];
-
-    $user = [
-        'id' => $getUser["id"] ?? null,
-        'username' => $getUser["username"] ?? "Nieznane",
-        'displayname' => $getUser["displayname"] ?? "Nieznane",
-        'avatar' => $getUser["avatar"] ?? $cfg_discord["default_avatar"],
-        'email' => $getUser["email"] ?? "Nieznane",
-        'created_at' => $getUser["created_at"] ?? "0000-00-00 00:00:00",
-        'last_login' => getLastLogin($getUser["id"])["login"] ?? "0000-00-00 00:00:00",
-        'last_update' => $getUser["last_update"] ?? "0000-00-00 00:00:00",
-        'role_id' => $getUser["role_id"] ?? 0,
-        'role_name' => $getUser["role_name"] ?? "Brak roli",
-    ];
 
     session_regenerate_id();
-    addLogin($user["id"]);
-    $_SESSION["user"] = $user;
+    addUserLogin($user["id"]);
+    $_SESSION["user"] = $getUser["user"];
     $_SESSION["guilds"] = $guilds;
 
-    redirectTo($redirect);
-    $_SESSION["loginRedirect"] = null;
+    unset($_SESSION["loginRedirect"]);
+    redirectTo($redirect, false);
     return ["success" => true, "message" => "Zalogowano użytkownika"];
 }
-
-// User Validation functions
-
-function isUserInGuild($guilds, $guild_id) {
+// #############################
+// # User Validation functions #
+// #############################
+function isUserInGuild($guilds, $guild_id): bool {
     foreach ($guilds as $guild) {
         if ($guild["id"] == $guild_id) {
             return true;
@@ -681,7 +808,7 @@ function isUserInGuild($guilds, $guild_id) {
     return false;
 }
 
-function isUserLogged() {
+function isUserLogged(): bool {
     return isset($_SESSION["user"]);
 }
 
@@ -724,30 +851,22 @@ function validateUser($redirect = null) {
         redirectTo("noaccess.php");
     }
 
-    $suspensions = getUserSuspensions($user["id"]);
-    if ($suspensions["success"] && $suspensions["suspensions"]) {
-        foreach ($suspensions["suspensions"] as $suspension) {
-            if ($suspension["statusId"] == 1) {
-                redirectTo("suspended.php");
-            }
-        }
+    if (isUserSuspended($user["id"])) {
+        redirectTo("suspended.php");
     }
 
-    $warnings = getUserWarnings($user["id"]);
-    if ($warnings["success"] && $warnings["warnings"]) {
-        foreach ($warnings["warnings"] as $suspension) {
-            if ($suspension["statusId"] == 1 && $suspension["isAccepted"] == 0) {
-                redirectTo("warning.php");
-            }
-        }
+    if (isUserWarned($user["id"])) {
+        redirectTo("warning.php");
     }
 
     return $_SESSION["user"];
 }
 
-// Permissions Validation functions
+// #########################
+// # Permissions functions #
+// #########################
 
-function checkUserPageAccess($permission, $checkLogin = true) {
+function checkUserPageAccess($permission, $checkLogin = true): bool {
     global $cfg_permissions;
 
     if ($checkLogin && !isUserLogged()) {
@@ -763,7 +882,7 @@ function checkUserPageAccess($permission, $checkLogin = true) {
     return false;
 }
 
-function checkUserPermission($category, $permission) {
+function checkUserPermission($category, $permission): bool {
     global $cfg_permissions;
 
     $user = $_SESSION["user"] ?? null;
@@ -776,7 +895,7 @@ function checkUserPermission($category, $permission) {
     return false;
 }
 
-function validateUserAccess($permission, $redirectLogin = null, $redirectNoAccess = true) {
+function validateUserAccess($permission, $redirectLogin = null, $redirectNoAccess = true): array {
     $user = validateUser($redirectLogin);
 
     if (!checkUserPageAccess($permission, false)) {
@@ -791,82 +910,96 @@ function validateUserAccess($permission, $redirectLogin = null, $redirectNoAcces
     return ["access" => true, "user" => $user];
 }
 
-// Suspensions functions
+// #########################
+// # Suspensions functions #
+// #########################
 
-function issueSuspension($userId, $params) {
+function isUserSuspended($userId): bool {
+    $suspensions = getUserSuspensions($userId);
+    if ($suspensions["success"] && $suspensions["suspensions"]) {
+        foreach ($suspensions["suspensions"] as $suspension) {
+            if ($suspension["status_id"] == 1) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+function issueSuspension($userId, $params): array {
     global $conn;
 
     $params = [
-        'issuerId' => $params["issuerId"] ?? null,
+        'issuer_id' => $params["issuer_id"] ?? null,
         'reason' => $params["reason"] ?? null,
-        'expiresAt' => $params["expiresAt"] ?? "0000-00-00 00:00:00",
-        'isPermanent' => $params["isPermanent"] ?? true,
+        'expires_at' => $params["expires_at"] ?? "0000-00-00 00:00:00",
+        'is_permanent' => $params["is_permanent"] ?? true,
     ];
 
     $stmt = $conn->prepare("INSERT INTO suspensions(user_id, issuer_id, reason, is_permanent, expires_at) VALUES (?,?,?,?,?)");
-    $stmt->bind_param("sssis", $userId, $params["issuerId"], $params["reason"], $params["isPermanent"], $params["expiresAt"]);
+    $stmt->bind_param("sssis", $userId, $params["issuer_id"], $params["reason"], $params["is_permanent"], $params["expires_at"]);
     $stmt->execute();
     if ($stmt->errno) {
         error_log("MySQL error: " . $stmt->error);
         return ["success" => false, "message" => "Wystąpił błąd podczas dodawania zawieszenia"];
     }
-    $stmt->close();
 
+    $stmt->close();
     return ["success" => true, "message" => "Użytkownik o ID $userId został zawieszony"];
 }
 
-function updateSuspension($suspensionId, $params) {
+function updateSuspension($suspensionId, $params): array {
     global $conn;
 
     $suspension = getSuspension($suspensionId);
-    if ($suspension["success"] == false) {
+    if (!$suspension["success"]) {
         return ["success" => false, "message" => $suspension["message"]];
-    } else if ($suspension["success"] && !$suspension["suspension"]) {
+    } else if (!$suspension["suspension"]) {
         return ["success" => false, "message" => "Zawieszenie o ID $suspensionId nie istnieje"];
     }
 
     $suspension = $suspension["suspension"];
     $params = [
-        'statusId' => $params["statusId"] ?? $suspension["status_id"],
-        'issuerId' => $params["issuerId"] ?? $suspension["issuer_id"],
-        'revokerId' => $params["revokerId"] ?? $suspension["revoker_id"],
+        'status_id' => $params["status_id"] ?? $suspension["status_id"],
+        'issuer_id' => $params["issuer_id"] ?? ($suspension["issuer_id"] != "Nieznane" ? $suspension["issuer_id"] : null),
+        'revoker_id' => $params["revoker_id"] ?? ($suspension["revoker_id"] != "Nieznane" ? $suspension["revoker_id"] : null),
         'reason' => $params["reason"] ?? $suspension["reason"],
-        'isPermanent' => $params["isPermanent"] ?? $suspension["is_permanent"],
-        'expiresAt' => $params["expiresAt"] ?? $suspension["expires_at"],
-        'issuedAt' => $params["issuedAt"] ?? $suspension["issued_at"],    
-        'revokedAt' => $params["revokedAt"] ?? $suspension["revoked_at"],
+        'is_permanent' => $params["is_permanent"] ?? $suspension["is_permanent"],
+        'expires_at' => $params["expires_at"] ?? $suspension["expires_at_raw"],
+        'issued_at' => $params["issued_at"] ?? $suspension["issued_at_raw"],
+        'revoked_at' => $params["revoked_at"] ?? $suspension["revoked_at_raw"],
     ];
 
     $stmt = $conn->prepare("UPDATE suspensions SET status_id = ?, issuer_id = ?, revoker_id = ?, reason = ?, is_permanent = ?, expires_at = ?, issued_at = ?, revoked_at = ? WHERE suspension_id = ?");
-    $stmt->bind_param("isssisssi", $params["statusId"], $params["issuerId"], $params["revokerId"], $params["reason"], $params["isPermanent"], $params["expiresAt"], $params["issuedAt"], $params["revokedAt"], $suspensionId);
+    $stmt->bind_param("isssisssi", $params["status_id"], $params["issuer_id"], $params["revoker_id"], $params["reason"], $params["is_permanent"], $params["expires_at"], $params["issued_at"], $params["revoked_at"], $suspensionId);
     $stmt->execute();
     if ($stmt->errno) {
         error_log("MySQL error: " . $stmt->error);
         return ["success" => false, "message" => "Wystąpił błąd podczas aktualizacji zawieszenia"];
     }
-    $stmt->close();
 
+    $stmt->close();
     return ["success" => true, "message" => "Zawieszenie o ID $suspensionId zostało zaktualizowane"];
 }
 
-function revokeSuspension($suspensionId, $revokerId) {
+function revokeSuspension($suspensionId, $revoker_id): array {
     $suspension = getSuspension($suspensionId);
-    if ($suspension["success"] == false) {
+    if (!$suspension["success"]) {
         return ["success" => false, "message" => $suspension["message"]];
-    } else if ($suspension["success"] && !$suspension["suspension"]) {
+    } else if (!$suspension["suspension"]) {
         return ["success" => false, "message" => "Zawieszenie o ID $suspensionId nie istnieje"];
-    } else if ($suspension["success"] && $suspension["suspension"]["status_id"] == 2) {
+    } else if ($suspension["suspension"]["status_id"] == 2) {
         return ["success" => false, "message" => "Zawieszenie o ID $suspensionId jest już unieważnione"];
     }
 
     return updateSuspension($suspensionId, [
-        'statusId' => 2,
-        'revokerId' => $revokerId,
-        'revokedAt' => date('Y-m-d H:i:s'),
+        'status_id' => 2,
+        'revoker_id' => $revoker_id,
+        'revoked_at' => date('Y-m-d H:i:s'),
     ]);
 }
 
-function deleteSuspension($suspensionId) {
+function deleteSuspension($suspensionId): array {
     global $conn;
 
     $stmt = $conn->prepare("DELETE FROM suspensions WHERE suspension_id = ?");
@@ -876,15 +1009,15 @@ function deleteSuspension($suspensionId) {
         error_log("MySQL error: " . $stmt->error);
         return ["success" => false, "message" => "Wystąpił błąd podczas usuwania zawieszenia"];
     }
-    $stmt->close();
 
+    $stmt->close();
     return ["success" => true, "message" => "Zawieszenie o ID $suspensionId zostało usunięte"];
 }
 
-function getSuspension($suspensionId, $checkIfExpired = true) {
+function getSuspension($suspensionId, $checkIfExpired = true): array {
     global $conn;
 
-    $stmt = $conn->prepare("SELECT s.suspension_id, s.status_id, st.status status_content, st.color status_color, s.user_id, u.username user_username, u.displayname user_displayname, s.issuer_id, i.username issuer_username, i.displayname issuer_displayname, s.revoker_id, r.username revoker_username, r.displayname revoker_displayname, s.reason, s.is_permanent, s.expires_at, s.issued_at, s.revoked_at FROM suspensions s LEFT JOIN punishment_status st ON s.status_id = st.status_id LEFT JOIN users u ON s.user_id = u.id LEFT JOIN users i ON s.issuer_id = i.id LEFT JOIN users r ON s.revoker_id = r.id WHERE s.suspension_id = ?");
+    $stmt = $conn->prepare("SELECT s.suspension_id, s.status_id, st.status_content, st.status_color, s.user_id, u.username user_username, u.displayname user_displayname, s.issuer_id, i.username issuer_username, i.displayname issuer_displayname, s.revoker_id, r.username revoker_username, r.displayname revoker_displayname, s.reason, s.is_permanent, s.expires_at, s.issued_at, s.revoked_at FROM suspensions s LEFT JOIN punishment_status st ON s.status_id = st.status_id LEFT JOIN users u ON s.user_id = u.id LEFT JOIN users i ON s.issuer_id = i.id LEFT JOIN users r ON s.revoker_id = r.id WHERE s.suspension_id = ?");
     $stmt->bind_param("s", $suspensionId);
     $stmt->execute();
     if ($stmt->errno) {
@@ -892,43 +1025,46 @@ function getSuspension($suspensionId, $checkIfExpired = true) {
         return ["success" => false, "message" => "Wystąpił błąd podczas pobierania informacji o zawieszeniu", "suspension" => null];
     }
     $result = $stmt->get_result();
-    $stmt->close();
 
     if ($result->num_rows == 0) {
         return ["success" => true, "message" => "Nie znaleziono zawieszenia o ID $suspensionId", "suspension" => null];
     } else {
         $result = $result->fetch_assoc();
+
         $suspension = [
-            'suspensionId' => $result["suspension_id"] ?? null,
-            'statusId' => $result["status_id"] ?? 1,
-            'statusContent' => $result["status_content"] ?? "Nieznane",
-            'statusColor' => $result["status_color"] ?? "gray",
-            'userId' => $result["user_id"] ?? "Nieznane",
-            'userUsername' => $result["user_username"] ?? "Nieznane",
-            'userDisplayname' => $result["user_displayname"] ?? "Nieznane",
-            'issuerId' => $result["issuer_id"] ?? "Nieznane",
-            'issuerUsername' => $result["issuer_username"] ?? "Nieznane",
-            'issuerDisplayname' => $result["issuer_displayname"] ?? "Nieznane",
-            'revokerId' => $result["revoker_id"] ?? "Nieznane",
-            'revokerUsername' => $result["revoker_username"] ?? "Nieznane",
-            'revokerDisplayname' => $result["revoker_displayname"] ?? "Nieznane",
+            'suspension_id' => $result["suspension_id"] ?? null,
+            'status_id' => $result["status_id"] ?? 1,
+            'status_content' => $result["status_content"] ?? "Nieznane",
+            'status_color' => $result["status_color"] ?? "gray",
+            'user_id' => $result["user_id"] ?? "Nieznane",
+            'user_username' => $result["user_username"] ?? "Nieznane",
+            'user_displayname' => $result["user_displayname"] ?? "Nieznane",
+            'issuer_id' => $result["issuer_id"] ?? "Nieznane",
+            'issuer_username' => $result["issuer_username"] ?? "Nieznane",
+            'issuer_displayname' => $result["issuer_displayname"] ?? "Nieznane",
+            'revoker_id' => $result["revoker_id"] ?? "Nieznane",
+            'revoker_username' => $result["revoker_username"] ?? "Nieznane",
+            'revoker_displayname' => $result["revoker_displayname"] ?? "Nieznane",
             'reason' => $result["reason"] ?? "Nieznane",
-            'isPermanent' => $result["is_permanent"] ?? true,
-            'expiresAt' => $result["expires_at"] ?? "0000-00-00 00:00:00",
-            'issuedAt' => $result["issued_at"] ?? "0000-00-00 00:00:00",
-            'revokedAt' => $result["revoked_at"] ?? "0000-00-00 00:00:00",
+            'is_permanent' => $result["is_permanent"] ?? true,
+            'expires_at' => formatDate($result["expires_at"] ?? "0000-00-00 00:00:00"),
+            'expires_at_raw' => $result["expires_at"] ?? "0000-00-00 00:00:00",
+            'issued_at' => formatDate($result["issued_at"] ?? "0000-00-00 00:00:00"),
+            'issued_at_raw' => $result["issued_at"] ?? "0000-00-00 00:00:00",
+            'revoked_at' => formatDate($result["revoked_at"] ?? "0000-00-00 00:00:00"),
+            'revoked_at_raw' => $result["revoked_at"] ?? "0000-00-00 00:00:00",
         ];
 
         $todayDate = new DateTime();
-        $expireDate = new DateTime($suspension["expiresAt"]);
+        $expireDate = new DateTime($suspension["expires_at_raw"]);
 
-        if ($checkIfExpired && $suspension["statusId"] == 1 && !$suspension["isPermanent"] && $expireDate < $todayDate) {
-            $update = updateSuspension($suspensionId, ["statusId" => 3]);
+        if ($checkIfExpired && $suspension["status_id"] == 1 && !$suspension["is_permanent"] && $expireDate < $todayDate) {
+            $update = updateSuspension($suspensionId, ["status_id" => 3]);
             if (!$update["success"]) {
                 return ["success" => false, "message" => $update["message"], "suspension" => null];
             }
 
-            $suspension = getSuspension($suspensionId);
+            $suspension = getSuspension($suspensionId, false);
             if (!$suspension["success"]) {
                 return ["success" => false, "message" => $suspension["message"], "suspension" => null];
             }
@@ -936,10 +1072,11 @@ function getSuspension($suspensionId, $checkIfExpired = true) {
         }
     }
 
+    $stmt->close();
     return ["success" => true, "message" => "Pobrano informacje o zawieszeniu o ID $suspensionId", "suspension" => $suspension];
 }
 
-function getUserSuspensions($userId) {
+function getUserSuspensions($userId): array {
     global $conn;
 
     $stmt = $conn->prepare("SELECT s.suspension_id FROM suspensions s WHERE s.user_id = ?");
@@ -950,20 +1087,20 @@ function getUserSuspensions($userId) {
         return ["success" => false, "message" => "Wystąpił błąd podczas pobierania zawieszeń użytkownika", "suspensions" => null];
     }
     $result = $stmt->get_result();
-    $stmt->close();
 
     $suspensions = [];
     while ($row = $result->fetch_assoc()) {
         $suspension = getSuspension($row["suspension_id"]);
         if ($suspension["success"] && $suspension["suspension"]) {
-            array_push($suspensions, $suspension["suspension"]);
+            $suspensions[] = $suspension["suspension"];
         }
     }
 
+    $stmt->close();
     return ["success" => true, "message" => "Pobrano zawieszenia użytkownika o ID $userId", "suspensions" => $suspensions];
 }
 
-function getAllSuspensions($search = null) {
+function getAllSuspensions($search = null): array {
     global $conn;
 
     if ($search) {
@@ -988,106 +1125,118 @@ function getAllSuspensions($search = null) {
         }
     }
 
+    $stmt->close();
     return ["success" => true, "message" => "Pobrano wszystkie zawieszenia", "suspensions" => $suspensions];
 }
 
-// Warnings functions
+// ######################
+// # Warnings functions #
+// ######################
 
-function issueWarning($userId, $params) {
+function isUserWarned($userId): bool {
+    $warnings = getUserWarnings($userId);
+    if ($warnings["success"] && $warnings["warnings"]) {
+        foreach ($warnings["warnings"] as $warning) {
+            if ($warning["status_id"] == 1 && $warning["is_accepted"] == 0) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+function issueWarning($userId, $params): array {
     global $conn;
 
     $params = [
-        'issuerId' => $params["issuerId"] ?? null,
+        'issuer_id' => $params["issuer_id"] ?? null,
         'reason' => $params["reason"] ?? null,
-        'expiresAt' => $params["expiresAt"] ?? "0000-00-00 00:00:00",
-        'isPermanent' => $params["isPermanent"] ?? true,
     ];
 
     $stmt = $conn->prepare("INSERT INTO warnings (user_id, issuer_id, reason) VALUES (?, ?, ?)");
-    $stmt->bind_param("sssis", $userId, $params["issuerId"], $params["reason"]);
+    $stmt->bind_param("sssis", $userId, $params["issuer_id"], $params["reason"]);
     $stmt->execute();
     if ($stmt->errno) {
         error_log("MySQL error: " . $stmt->error);
         return ["success" => false, "message" => "Wystąpił błąd podczas dodawania ostrzeżenia"];
     }
-    $stmt->close();
 
+    $stmt->close();
     return ["success" => true, "message" => "Użytkownik o ID $userId został ostrzeżony"];
 }
 
-function acceptWarning($warningId) {
+function acceptWarning($warningId): array {
     $warning = getWarning($warningId);
 
     if (!$warning["success"]) {
         return ["success" => false, "message" => $warning["message"]];
-    }
-    if ($warning["warning"] == null) {
+    } else if (!$warning["warning"]) {
         return ["success" => false, "message" => "Ostrzeżenie o ID $warningId nie istnieje"];
-    }
-    if ($warning["warning"]["isAccepted"] == true) {
+    } else if ($warning["warning"]["is_accepted"]) {
         return ["success" => false, "message" => "Ostrzeżenie o ID $warningId zostało już zaakceptowane"];
-    }
-    if ($warning["warning"]["statusId"] == 2) {
+    } else if ($warning["warning"]["status_id"] == 2) {
         return ["success" => false, "message" => "Ostrzeżenie o ID $warningId zostało unieważnione"];
-    }
-    if (isset($_SESSION["user"]["id"]) && $warning["warning"]["userId"] != $_SESSION["user"]["id"]) {
+    } else if (isset($_SESSION["user"]["id"]) && $warning["warning"]["user_id"] != $_SESSION["user"]["id"]) {
         return ["success" => false, "message" => "Nie masz uprawnień do zaakceptowania ostrzeżenia o ID $warningId"];
     }
 
-    return updateWarning($warningId, ["isAccepted" => true]);
+    return updateWarning($warningId, ["is_accepted" => true]);
 }
 
-function updateWarning($warningId, $params) {
+function updateWarning($warningId, $params): array {
     global $conn;
 
     $warning = getWarning($warningId);
-    if ($warning["success"] == false) {
+    if (!$warning["success"]) {
         return ["success" => false, "message" => $warning["message"]];
-    } else if ($warning["success"] && !$warning["warning"]) {
+    } else if (!$warning["warning"]) {
         return ["success" => false, "message" => "Ostrzeżenie o ID $warningId nie istnieje"];
     }
 
     $warning = $warning["warning"];
     $params = [
-        'statusId' => $params["statusId"] ?? $warning["status_id"],
-        'issuerId' => $params["issuerId"] ?? $warning["issuer_id"],
-        'revokerId' => $params["revokerId"] ?? $warning["revoker_id"],
+        'status_id' => $params["status_id"] ?? $warning["status_id"],
+        'issuer_id' => $params["issuer_id"] ?? ($warning["issuer_id"] != "Nieznane" ? $warning["issuer_id"] : null),
+        'revoker_id' => $params["revoker_id"] ?? ($warning["revoker_id"] != "Nieznane" ? $warning["revoker_id"] : null),
         'reason' => $params["reason"] ?? $warning["reason"],
-        'isAccepted' => $params["isAccepted"] ?? $warning["is_accepted"],
-        'issuedAt' => $params["issuedAt"] ?? $warning["issued_at"],    
-        'revokedAt' => $params["revokedAt"] ?? $warning["revoked_at"],
+        'is_accepted' => $params["is_accepted"] ?? $warning["is_accepted"],
+        'issued_at' => $params["issued_at"] ?? $warning["issued_at_raw"],
+        'revoked_at' => $params["revoked_at"] ?? $warning["revoked_at_raw"],
     ];
 
+    var_dump($params);
+    echo "<br>";
+
     $stmt = $conn->prepare("UPDATE warnings SET status_id = ?, issuer_id = ?, revoker_id = ?, reason = ?, is_accepted = ?, issued_at = ?, revoked_at = ? WHERE warning_id = ?");
-    $stmt->bind_param("isssiiss", $params["statusId"], $params["issuerId"], $params["revokerId"], $params["reason"], $params["isAccepted"], $params["issuedAt"], $params["revokedAt"], $warningId);
+    $stmt->bind_param("isssiiss", $params["status_id"], $params["issuer_id"], $params["revoker_id"], $params["reason"], $params["is_accepted"], $params["issued_at"], $params["revoked_at"], $warningId);
     $stmt->execute();
     if ($stmt->errno) {
         error_log("MySQL error: " . $stmt->error);
         return ["success" => false, "message" => "Wystąpił błąd podczas aktualizacji ostrzeżenia"];
     }
-    $stmt->close();
 
+    $stmt->close();
     return ["success" => true, "message" => "Ostrzeżenie o ID $warningId zostało zaktualizowane"];
 }
 
-function revokeWarning($warningId, $revokerId) {
+function revokeWarning($warningId, $revoker_id): array {
     $warning = getWarning($warningId);
-    if ($warning["success"] == false) {
+    if (!$warning["success"]) {
         return ["success" => false, "message" => $warning["message"]];
-    } else if ($warning["success"] && !$warning["warning"]) {
+    } else if (!$warning["warning"]) {
         return ["success" => false, "message" => "Ostrzeżenie o ID $warningId nie istnieje"];
-    } else if ($warning["success"] && $warning["warning"]["status_id"] == 2) {
+    } else if ($warning["warning"]["status_id"] == 2) {
         return ["success" => false, "message" => "Ostrzeżenie o ID $warningId jest już unieważnione"];
     }
 
     return updateWarning($warningId, [
-        'statusId' => 2,
-        'revokerId' => $revokerId,
-        'revokedAt' => date('Y-m-d H:i:s'),
+        'status_id' => 2,
+        'revoker_id' => $revoker_id,
+        'revoked_at' => date('Y-m-d H:i:s'),
     ]);
 }
 
-function deleteWarning($warningId) {
+function deleteWarning($warningId): array {
     global $conn;
 
     $stmt = $conn->prepare("DELETE FROM warnings WHERE warning_id = ?");
@@ -1102,10 +1251,10 @@ function deleteWarning($warningId) {
     return ["success" => true, "message" => "Ostrzeżenie o ID $warningId zostało usunięte"];
 }
 
-function getWarning($warningId) {
+function getWarning($warningId): array {
     global $conn;
 
-    $stmt = $conn->prepare("SELECT w.warning_id, w.status_id, st.status status_content, st.color status_color, w.user_id, u.username user_username, u.displayname user_displayname, w.issuer_id, i.username issuer_username, i.displayname issuer_displayname, w.revoker_id, r.username revoker_username, r.displayname revoker_displayname, w.reason, w.is_accepted, w.issued_at, w.revoked_at FROM warnings w LEFT JOIN punishment_status st ON w.status_id = st.status_id LEFT JOIN users u ON w.user_id = u.id LEFT JOIN users i ON w.issuer_id = i.id LEFT JOIN users r ON w.revoker_id = r.id WHERE w.warning_id = ?");
+    $stmt = $conn->prepare("SELECT w.warning_id, w.status_id, st.status_content, st.status_color, w.user_id, u.username user_username, u.displayname user_displayname, w.issuer_id, i.username issuer_username, i.displayname issuer_displayname, w.revoker_id, r.username revoker_username, r.displayname revoker_displayname, w.reason, w.is_accepted, w.issued_at, w.revoked_at FROM warnings w LEFT JOIN punishment_status st ON w.status_id = st.status_id LEFT JOIN users u ON w.user_id = u.id LEFT JOIN users i ON w.issuer_id = i.id LEFT JOIN users r ON w.revoker_id = r.id WHERE w.warning_id = ?");
     $stmt->bind_param("s", $warningId);
     $stmt->execute();
     if ($stmt->errno) {
@@ -1113,7 +1262,6 @@ function getWarning($warningId) {
         return ["success" => false, "message" => "Wystąpił błąd podczas pobierania informacji o ostrzeżeniu", "warning" => null];
     }
     $result = $stmt->get_result();
-    $stmt->close();
 
     if ($result->num_rows == 0) {
         return ["success" => true, "message" => "Nie znaleziono ostrzeżenia o ID $warningId", "warning" => null];
@@ -1121,29 +1269,32 @@ function getWarning($warningId) {
 
     $result = $result->fetch_assoc();
     $warning = [
-        'warningId' => $result["warning_id"] ?? null,
-        'statusId' => $result["status_id"] ?? 1,
-        'statusContent' => $result["status_content"] ?? "Nieznane",
-        'statusColor' => $result["status_color"] ?? "gray",
-        'userId' => $result["user_id"] ?? "Nieznane",
-        'userUsername' => $result["user_username"] ?? "Nieznane",
-        'userDisplayname' => $result["user_displayname"] ?? "Nieznane",
-        'issuerId' => $result["issuer_id"] ?? "Nieznane",
-        'issuerUsername' => $result["issuer_username"] ?? "Nieznane",
-        'issuerDisplayname' => $result["issuer_displayname"] ?? "Nieznane",
-        'revokerId' => $result["revoker_id"] ?? "Nieznane",
-        'revokerUsername' => $result["revoker_username"] ?? "Nieznane",
-        'revokerDisplayname' => $result["revoker_displayname"] ?? "Nieznane",
+        'warning_id' => $result["warning_id"] ?? null,
+        'status_id' => $result["status_id"] ?? 1,
+        'status_content' => $result["status_content"] ?? "Nieznane",
+        'status_color' => $result["status_color"] ?? "gray",
+        'user_id' => $result["user_id"] ?? "Nieznane",
+        'user_username' => $result["user_username"] ?? "Nieznane",
+        'user_displayname' => $result["user_displayname"] ?? "Nieznane",
+        'issuer_id' => $result["issuer_id"] ?? "Nieznane",
+        'issuer_username' => $result["issuer_username"] ?? "Nieznane",
+        'issuer_displayname' => $result["issuer_displayname"] ?? "Nieznane",
+        'revoker_id' => $result["revoker_id"] ?? "Nieznane",
+        'revoker_username' => $result["revoker_username"] ?? "Nieznane",
+        'revoker_displayname' => $result["revoker_displayname"] ?? "Nieznane",
         'reason' => $result["reason"] ?? "Nieznane",
-        'isAccepted' => $result["is_accepted"] ?? false,
-        'issuedAt' => $result["issued_at"] ?? "0000-00-00 00:00:00",
-        'revokedAt' => $result["revoked_at"] ?? "0000-00-00 00:00:00"
+        'is_accepted' => $result["is_accepted"] ?? false,
+        'issued_at' => formatDate($result["issued_at"] ?? "0000-00-00 00:00:00"),
+        'issued_at_raw' => $result["issued_at"] ?? "0000-00-00 00:00:00",
+        'revoked_at' => formatDate($result["revoked_at"] ?? "0000-00-00 00:00:00"),
+        'revoked_at_raw' => $result["revoked_at"] ?? "0000-00-00 00:00:00",
     ];
 
+    $stmt->close();
     return ["success" => true, "message" => "Pobrano informacje o ostrzeżeniu o ID $warningId", "warning" => $warning];
 }
 
-function getUserWarnings($userId) {
+function getUserWarnings($userId): array {
     global $conn;
 
     $stmt = $conn->prepare("SELECT w.warning_id FROM warnings w WHERE w.user_id = ?");
@@ -1154,20 +1305,20 @@ function getUserWarnings($userId) {
         return ["success" => false, "message" => "Wystąpił błąd podczas pobierania ostrzeżeń użytkownika", "warnings" => null];
     }
     $result = $stmt->get_result();
-    $stmt->close();
 
     $warnings = [];
     while ($row = $result->fetch_assoc()) {
         $warning = getWarning($row["warning_id"]);
         if ($warning["success"] && $warning["warning"]) {
-            array_push($warnings, $warning["warning"]);
+            $warnings[] = $warning["warning"];
         }
     }
 
+    $stmt->close();
     return ["success" => true, "message" => "Pobrano ostrzeżenia użytkownika o ID $userId", "warnings" => $warnings];
 }
 
-function getAllWarnings($search = null) {
+function getAllWarnings($search = null): array {
     global $conn;
 
     if ($search) {
@@ -1192,5 +1343,89 @@ function getAllWarnings($search = null) {
         }
     }
 
+    $stmt->close();
     return ["success" => true, "message" => "Pobrano wszystkie ostrzeżenia", "warnings" => $warnings];
+}
+
+// ####################################
+// # Documents functions --- Officers #
+// ####################################
+
+function getOfficersDepartments(): array {
+    global $conn;
+
+    $stmt = $conn->prepare("SELECT * FROM officers_departments");
+    $stmt->execute();
+    if ($stmt->error) {
+        error_log("MySQL error: " . $stmt->error);
+        return ["success" => false, "message" => "Wystąpił błąd podczas pobierania departamentów", "departments" => null];
+    }
+    $result = $stmt->get_result();
+
+    $departments = [];
+    while ($row = $result->fetch_assoc()) {
+        $departments[] = [
+            "id" => $row["officer_department_id"] ?? 0,
+            "name" => $row["officer_department_name"] ?? "Nieznane",
+        ];
+    }
+
+    $stmt->close();
+    return ["success" => true, "message" => "Pobrano departamenty", "departments" => $departments];
+}
+
+function getOffcers(): array {
+    global $conn;
+
+    $stmt = $conn->prepare("SELECT o.officer_name, o.officer_badge, o.officer_image, r.officer_rank_name, o.officer_department_id, d.officer_department_name, o.officer_discord_id FROM officers o LEFT JOIN officers_ranks r ON o.officer_rank_id = r.officer_rank_id LEFT JOIN officers_departments d ON o.officer_department_id = d.officer_department_id ORDER BY o.officer_rank_id ASC");
+    $stmt->execute();
+    if ($stmt->error) {
+        error_log("MySQL error: " . $stmt->error);
+        return ["success" => false, "message" => "Wystąpił błąd podczas pobierania oficerów", "officers" => null];
+    }
+    $result = $stmt->get_result();
+
+    $officers = [];
+    while ($row = $result->fetch_assoc()) {
+        $officers[] = [
+            "name" => $row["officer_name"] ?? "Nieznane",
+            "badge" => $row["officer_badge"] ?? "?",
+            "image" => $row["officer_image"] ?? "placeholder.png",
+            "rank" => $row["officer_rank_name"] ?? "Nieznane",
+            "department_id" => $row["officer_department_id"] ?? 0,
+            "department" => $row["officer_department_name"] ?? "Nieznane",
+            "discord_id" => $row["officer_discord_id"] ?? "Nieznane",
+        ];
+    }
+
+    $stmt->close();
+    return ["success" => true, "message" => "Pobrano oficerów", "officers" => $officers];
+}
+
+// ####################################
+// # Documents functions --- Discords #
+// ####################################
+
+function getDiscords(): array {
+    global $conn;
+
+    $stmt = $conn->prepare("SELECT * FROM discords ORDER BY discord_display_order ASC");
+    $stmt->execute();
+    if ($stmt->error) {
+        error_log("MySQL error: " . $stmt->error);
+        return ["success" => false, "message" => "Wystąpił błąd podczas pobierania discordów", "discords" => null];
+    }
+    $result = $stmt->get_result();
+
+    $discords = [];
+    while ($row = $result->fetch_assoc()) {
+        $discords[] = [
+            "name" => $row["discord_name"],
+            "invite" => $row["discord_invite"],
+            "image" => $row["discord_image"] ?? "placeholder.png",
+        ];
+    }
+
+    $stmt->close();
+    return ["success" => true, "message" => "Pobrano wszystkie serwery Discord", "discords" => $discords];
 }

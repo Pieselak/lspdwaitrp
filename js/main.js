@@ -1,5 +1,121 @@
 document.addEventListener("DOMContentLoaded", function () {
+  const main = document.querySelector("main");
   console.log("DOM loaded with JavaScript");
+
+  // Popup functionality
+
+  function createAlert(parameters) {
+    const popup = document.createElement("div");
+    const popupColor = parameters.color || "-";
+    const popupButtons = parameters.buttons || [];
+    const popupClosable = parameters.closable !== undefined ? parameters.closable : true;
+    const popupObject = {
+      isClosed: false,
+      close: () => {
+        if (popup) {
+          popup.classList.add("popup-out");
+          setTimeout(() => {
+            popup.remove()
+            popupObject.isClosed = true;
+          }, 250);
+        }
+      },
+      setColor: (color) => {
+        popup.classList.remove(popupColor);
+        popup.classList.add(color);
+      },
+      setTitle: (title) => {
+        const titleElement = popup.querySelector(".popup-header h2");
+        if (titleElement) {
+          titleElement.textContent = title;
+        }
+      },
+      setContent: (content) => {
+        const contentElement = popup.querySelector(".popup-content");
+        if (contentElement) {
+          contentElement.innerHTML = `<p>${content}</p>`;
+        }
+      },
+      setButtons: (buttons) => {
+        const buttonsContainer = popup.querySelector(".popup-buttons");
+        if (buttonsContainer) {
+          buttonsContainer.innerHTML = "";
+          buttons.forEach((button) => {
+            const buttonElement = document.createElement("button");
+            const buttonText = button.text || "?";
+            const buttonClass = button.class || "";
+
+            buttonElement.classList.add(buttonClass);
+            buttonElement.textContent = buttonText;
+            buttonElement.addEventListener("click", function () {
+              if (button.callback) {
+                button.callback();
+              }
+              if (popupClosable) {
+                closeAlert(popup);
+              }
+            });
+            buttonsContainer.appendChild(buttonElement);
+          });
+        }
+      },
+    };
+
+    popup.classList.add("popup", popupColor);
+    if (parameters.title) {
+      popup.innerHTML += `
+      <div class="popup-header">
+        <h2>${parameters.title}</h2>
+       </div>`;
+    }
+
+    if (parameters.content) {
+      popup.innerHTML += `
+        <div class="popup-content">
+            <p>${parameters.content}</p>
+        </div>`;
+    }
+
+    if (popupButtons.length > 0 || popupClosable) {
+      const buttonsContainer = document.createElement("div");
+      buttonsContainer.classList.add("popup-buttons");
+
+      if (popupButtons.length === 0 && popupClosable) {
+        const buttonElement = document.createElement("button");
+        buttonElement.classList.add(popupColor);
+        buttonElement.textContent = "Zamknij"
+
+        buttonElement.addEventListener("click", function () {
+          popupObject.close();
+        })
+        buttonsContainer.appendChild(buttonElement);
+      } else {
+        popupButtons.forEach((button) => {
+          const buttonElement = document.createElement("button");
+          const buttonText = button.text || "?";
+          const buttonClass = button.class || "";
+
+          buttonElement.classList.add(buttonClass);
+          buttonElement.textContent = buttonText;
+          buttonElement.addEventListener("click", function () {
+            if (button.callback) {
+              button.callback();
+            }
+            if (popupClosable) {
+              popupObject.close();
+            }
+          });
+          buttonsContainer.appendChild(buttonElement);
+        });
+      }
+
+      popup.appendChild(buttonsContainer);
+    }
+
+    main.appendChild(popup);
+    return popupObject;
+  }
+  window.createAlert = createAlert;
 
   // Textarea functionality
 
@@ -152,8 +268,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   handleResponsiveNavbar();
   window.addEventListener("resize", handleResponsiveNavbar);
-
-  const profileUsername = document.querySelector(".profile-username");
 
   // Dropdown functionality
   const dropdownButtons = document.querySelectorAll(".dropdown-button");

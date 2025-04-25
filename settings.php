@@ -1,11 +1,11 @@
 <?php 
-    include_once ("php/functions.php");
+    include_once("server/functions.php");
 
     checkMaintenance();
     $user = validateUser("settings.php");
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="pl">
     <head>
         <?php include ("components/head.php") ?>
     </head>

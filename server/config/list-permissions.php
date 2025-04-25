@@ -20,7 +20,7 @@
             "staff-academies" => [], 
             "staff-suspensions" => [], 
             "staff-warnings" => [], 
-            "staff-users" => []
+            "staff-users" => ["view-logs"]
         ],
         6 => [
             "staff-applications" => [], 
@@ -28,7 +28,7 @@
             "staff-suspensions" => [], 
             "staff-warnings" => [], 
             "staff-users" => [], 
-            "staff-logs" => []
+            "staff-logs" => ["view-logs"]
         ],
         7 => [
             "staff-admin" => [], 
@@ -37,7 +37,6 @@
             "staff-suspensions" => [], 
             "staff-warnings" => [], 
             "staff-users" => [], 
-            "staff-logs" => []
+            "staff-logs" => ["view-logs", "delete-logs"]
         ],
-    ]
-?>
+    ];

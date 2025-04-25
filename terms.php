@@ -1,11 +1,11 @@
 <?php 
-    include_once ("php/functions.php");
-    $list = include("php/list-terms.php");
+    include_once("server/functions.php");
+    $list = include("server/config/list-terms.php");
 
     checkMaintenance();
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="pl">
     <head>
         <?php include ("components/head.php") ?>
     </head>

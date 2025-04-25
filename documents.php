@@ -1,13 +1,13 @@
 <?php 
-    include_once ("php/functions.php");
-    $list = include("php/list-documents.php");
+    include_once("server/functions.php");
+    $list = include("server/config/list-documents.php");
     $getPage = $_GET["page"] ?? null;
     
     checkMaintenance();
     $user = validateUser("documents.php");
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="pl">
     <head>
         <?php include ("components/head.php") ?>
     </head>

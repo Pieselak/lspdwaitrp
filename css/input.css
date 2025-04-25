@@ -23,6 +23,19 @@ select {
   transition: all 0.25s;
 }
 
+input[type="text"].small,
+input[type="password"].small,
+input[type="email"].small,
+input[type="number"].small,
+input[type="date"].small,
+input[type="time"].small,
+input[type="search"].small,
+textarea.small,
+select.small {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+}
+
 input[type="text"]:not(:disabled):hover,
 input[type="password"]:not(:disabled):hover,
 input[type="email"]:not(:disabled):hover,

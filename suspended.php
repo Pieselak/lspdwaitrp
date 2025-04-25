@@ -1,29 +1,27 @@
 <?php 
-    include_once ("php/functions.php");
+    include_once("server/functions.php");
 
     checkMaintenance();
     $user = validateUserBasic("index.php");
 
     $suspensions = getUserSuspensions($user["id"]);
-    $suspension;
 
     if ($suspensions["success"]) {
         foreach ($suspensions["suspensions"] as $s) {
-            if ($s["statusId"] == 1) {
+            if ($s["status_id"] == 1) {
                 $suspension = $s;
                 break;
             }
         }
-    } else {
-        $suspension = false;
     }
+    $suspension = $suspension ?? false;
 
     if (!$suspension) {
         redirectTo("index.php");
     }
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="pl">
     <head>
         <?php include ("components/head.php") ?>
     </head>
@@ -43,27 +41,27 @@
                         <div class="info">
                             <div>
                                 <p class="small">Identyfikator:</p>
-                                <p>#<?= $suspension["suspensionId"] ?> | @<?= $suspension["userUsername"] ?></p>
+                                <p>#<?= $suspension["suspension_id"] ?> | @<?= $suspension["user_username"] ?></p>
                             </div>
-                            <div class="divider"></div>
+                            <div class="separator"></div>
                             <div>
                                 <p class="small">Powód:</p>
                                 <p><?= $suspension["reason"] ?></p>
                             </div>
-                            <div class="divider"></div>
+                            <div class="separator"></div>
                             <div>
                                 <p class="small">Wygasa w dniu:</p>
-                                <p><?= $suspension["isPermanent"] ? "Nigdy (Permanentna)" : formatDate($suspension["expiresAt"], "datetime") ?></p>
+                                <p><?= $suspension["is_permanent"] ? "Nigdy (Permanentna)" : $suspension["expires_at"] ?></p>
                             </div>
-                            <div class="divider"></div>
+                            <div class="separator"></div>
                             <div>
                                 <p class="small">Nadana w dniu:</p>
-                                <p><?= formatDate($suspension["issuedAt"], "datetime") ?></p>
+                                <p><?= $suspension["issued_at"] ?></p>
                             </div>
-                            <div class="divider"></div>
+                            <div class="separator"></div>
                             <div>
                                 <p class="small">Nadana przez:</p>
-                                <p>@<?= $suspension["issuerUsername"] ?></p>
+                                <p>@<?= $suspension["issuer_username"] ?></p>
                             </div>
                         </div>
                     </div>

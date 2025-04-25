@@ -1,9 +1,10 @@
 <?php 
-    include_once ("php/functions.php");
-    $componentAnnouncement = getAnnouncement();
+    include_once("server/functions.php");
+    $componentAnnouncementMode = getAnnouncementMode();
+    $componentAnnouncementContent = getAnnouncementContent();
 
-    if ($componentAnnouncement["success"] && $componentAnnouncement["message"]):
-        $message = validate($componentAnnouncement["message"], "format-tags");
+    if ($componentAnnouncementContent["success"] && $componentAnnouncementMode["success"] && $componentAnnouncementMode["message"] == "1"):
+        $message = validate($componentAnnouncementContent["message"], "string-tags");
         if ($message["success"]) {
             $message = $message["message"];
         } else {

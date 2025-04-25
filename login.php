@@ -1,5 +1,5 @@
 <?php 
-    include_once ("php/functions.php");
+    include_once("server/functions.php");
     $redirect = $_SESSION["loginRedirect"] ?? null;
     $error = $_SESSION["loginError"] ?? null;
     
@@ -7,7 +7,7 @@
     checkMaintenance();
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="pl">
     <head>
         <?php include ("components/head.php") ?>
     </head>
